@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== TREE VIEW ==================== -->
+    <record id="view_serie_comprobante_tree" model="ir.ui.view">
+        <field name="name">sunat.serie.comprobante.tree</field>
+        <field name="model">sunat.serie.comprobante</field>
+        <field name="arch" type="xml">
+            <tree string="Series de Comprobantes">
+                <field name="name"/>
+                <field name="tipo_documento_id"/>
+                <field name="punto_emision"/>
+                <field name="correlativo_actual"/>
+                <field name="proximo_numero"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ==================== FORM VIEW ==================== -->
+    <record id="view_serie_comprobante_form" model="ir.ui.view">
+        <field name="name">sunat.serie.comprobante.form</field>
+        <field name="model">sunat.serie.comprobante</field>
+        <field name="arch" type="xml">
+            <form string="Serie de Comprobante">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Ej: F001"/>
+                        </h1>
+                        <h3>
+                            Próximo: <field name="proximo_numero" readonly="1"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="tipo_documento_id"/>
+                            <field name="punto_emision"/>
+                        </group>
+                        <group>
+                            <field name="correlativo_actual"/>
+                            <field name="company_id"
+                                   groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_serie_comprobante" model="ir.actions.act_window">
+        <field name="name">Series de Comprobantes</field>
+        <field name="res_model">sunat.serie.comprobante</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear una nueva serie
+            </p>
+            <p>
+                Las series identifican el punto de emisión de comprobantes
+                (ej: F001 para facturas, B001 para boletas).
+            </p>
+        </field>
+    </record>
+
+</odoo>

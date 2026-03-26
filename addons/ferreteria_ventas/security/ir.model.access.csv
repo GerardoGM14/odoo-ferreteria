@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_import_wizard_manager,ferreteria.import.wizard.manager,model_ferreteria_import_productos_wizard,group_supervisor_ventas,1,1,1,1
+access_import_wizard_user,ferreteria.import.wizard.user,model_ferreteria_import_productos_wizard,group_vendedor_ferreteria,1,0,0,0

@@ -1,0 +1,52 @@
+Módulo de Inventario y Almacenes
+Gestionar productos de alta rotación y múltiples variantes (tamaños, colores, modelos).
+Funciones:
+Registro completo de productos, categorías y variantes.
+Control de stock en tiempo real.
+Gestión de múltiples almacenes o zonas internas.
+Alertas de stock mínimo y producto crítico.
+Trazabilidad por lote o serie (si corresponde).
+Kardex automático y valorizado.
+Integración con compras y ventas para movimientos automáticos.
+
+2.1.2.Módulo de Ventas 
+Para venta rápida en mostrador o venta a crédito para clientes.
+Funciones:
+Punto de Venta rápido 
+Cotizaciones y órdenes de venta 
+Control de precios, listas especiales y descuentos autorizados.
+Registro de clientes y seguimiento de historial de compras.
+Emisión automática de documentos electrónicos 
+Integración directa con inventarios y caja.
+
+2.1.3.Módulo de Compras
+Para garantizar un abastecimiento eficiente.
+Funciones:
+Solicitudes de cotización a proveedores.
+Órdenes de compra con actualización automática de stock.
+Control de precios.
+Registro de proveedores.
+Control de tiempos de entrega y cumplimiento (si corresponde)
+
+2.1.4.Módulo de Facturación Electrónica
+Conector autorizado para SUNAT.
+Funciones:
+Emisión de facturas, boletas, notas de crédito y débito.
+Registro de pago.
+Validación y consulta en tiempo real a SUNAT.
+
+2.1.5.Módulo de Finanzas
+Finanzas adaptadas a ferretería con flujo diario de ventas.
+Funciones:
+Registro de cuentas por cobrar y pagar.
+Conciliación bancaria 
+Control de caja diaria
+Reportes financieros: Ganancia, Flujo de Caja, etc.
+Integración con ventas, compras y facturación.
+
+2.1.6.Módulo de Usuarios y Seguridad
+Configuración para 3 a 5 usuarios, con permisos y roles definidos.
+Funciones:
+Creación de perfiles por área (ventas, almacén, caja, gerencia, etc).
+Control de accesos y restricciones por módulo.
+Configuración de sesiones activas y límites de uso.

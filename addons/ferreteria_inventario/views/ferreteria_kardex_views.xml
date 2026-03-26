@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== TREE VIEW ==================== -->
+    <record id="view_ferreteria_kardex_tree" model="ir.ui.view">
+        <field name="name">ferreteria.kardex.tree</field>
+        <field name="model">ferreteria.kardex</field>
+        <field name="arch" type="xml">
+            <tree string="Kardex de Inventario" create="false"
+                  edit="false" delete="false"
+                  decoration-success="tipo_movimiento == 'entrada'"
+                  decoration-danger="tipo_movimiento == 'salida'">
+                <field name="date" widget="datetime"/>
+                <field name="product_id"/>
+                <field name="ferreteria_categoria_id" optional="show"/>
+                <field name="tipo_movimiento"/>
+                <field name="quantity" sum="Total Cantidad"/>
+                <field name="reference"/>
+                <field name="location_id" optional="hide"/>
+                <field name="location_dest_id" optional="hide"/>
+                <field name="picking_id" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="view_ferreteria_kardex_search" model="ir.ui.view">
+        <field name="name">ferreteria.kardex.search</field>
+        <field name="model">ferreteria.kardex</field>
+        <field name="arch" type="xml">
+            <search string="Buscar en Kardex">
+                <field name="product_id" string="Producto"/>
+                <field name="reference" string="Referencia"/>
+                <field name="ferreteria_categoria_id" string="Categoría"/>
+                <separator/>
+                <filter string="Entradas" name="filter_entradas"
+                        domain="[('tipo_movimiento', '=', 'entrada')]"
+                        icon="fa-arrow-down"/>
+                <filter string="Salidas" name="filter_salidas"
+                        domain="[('tipo_movimiento', '=', 'salida')]"
+                        icon="fa-arrow-up"/>
+                <separator/>
+                <filter string="Hoy" name="filter_today"
+                        domain="[('date', '&gt;=', (context_today()).strftime('%%Y-%%m-%%d')),
+                                 ('date', '&lt;', (context_today() + datetime.timedelta(days=1)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="Esta Semana" name="filter_week"
+                        domain="[('date', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="Este Mes" name="filter_month"
+                        domain="[('date', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Producto" name="group_product"
+                            context="{'group_by': 'product_id'}"/>
+                    <filter string="Categoría" name="group_categoria"
+                            context="{'group_by': 'ferreteria_categoria_id'}"/>
+                    <filter string="Tipo" name="group_tipo"
+                            context="{'group_by': 'tipo_movimiento'}"/>
+                    <filter string="Fecha (Mes)" name="group_date_month"
+                            context="{'group_by': 'date:month'}"/>
+                    <filter string="Fecha (Día)" name="group_date_day"
+                            context="{'group_by': 'date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_ferreteria_kardex" model="ir.actions.act_window">
+        <field name="name">Kardex de Inventario</field>
+        <field name="res_model">ferreteria.kardex</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_ferreteria_kardex_search"/>
+        <field name="context">{'search_default_filter_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay movimientos de inventario
+            </p>
+            <p>
+                El kardex se alimenta automáticamente de las transferencias de stock.
+                Registra entradas y salidas para ver los movimientos aquí.
+            </p>
+        </field>
+    </record>
+
+</odoo>

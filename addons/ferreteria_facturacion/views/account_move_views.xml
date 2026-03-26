@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== HEREDAR FORM VIEW ==================== -->
+    <record id="account_move_form_view_sunat" model="ir.ui.view">
+        <field name="name">account.move.form.sunat</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Botones SUNAT en el header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_generar_numero"
+                        type="object"
+                        string="Generar Número"
+                        class="btn-secondary"
+                        invisible="sunat_estado != 'borrador' or move_type not in ('out_invoice', 'out_refund')"
+                        groups="group_facturador"/>
+                <button name="action_enviar_sunat"
+                        type="object"
+                        string="Enviar a SUNAT"
+                        class="btn-primary"
+                        icon="fa-paper-plane"
+                        invisible="sunat_estado not in ('por_enviar', 'rechazado')"
+                        groups="group_facturador"/>
+                <button name="action_consultar_sunat"
+                        type="object"
+                        string="Consultar SUNAT"
+                        class="btn-secondary"
+                        icon="fa-search"
+                        invisible="sunat_estado not in ('enviado', 'aceptado')"
+                        groups="group_facturador"/>
+                <button name="action_anular_sunat"
+                        type="object"
+                        string="Anular en SUNAT"
+                        class="btn-danger"
+                        icon="fa-ban"
+                        invisible="sunat_estado != 'aceptado'"
+                        confirm="¿Está seguro de anular este comprobante en SUNAT?"
+                        groups="group_admin_facturacion"/>
+            </xpath>
+
+            <!-- Pestaña SUNAT -->
+            <xpath expr="//page[last()]" position="after">
+                <page string="SUNAT" name="sunat"
+                      invisible="move_type not in ('out_invoice', 'out_refund')">
+                    <group>
+                        <group string="Comprobante Electrónico">
+                            <field name="sunat_tipo_documento_id"/>
+                            <field name="sunat_serie_id"/>
+                            <field name="sunat_numero" readonly="1"/>
+                            <field name="sunat_estado"
+                                   widget="badge"
+                                   decoration-success="sunat_estado == 'aceptado'"
+                                   decoration-danger="sunat_estado == 'rechazado'"
+                                   decoration-warning="sunat_estado in ('por_enviar', 'enviado')"
+                                   decoration-info="sunat_estado == 'borrador'"
+                                   decoration-muted="sunat_estado == 'anulado'"/>
+                        </group>
+                        <group string="Datos del Receptor">
+                            <field name="sunat_tipo_identidad_id"/>
+                            <field name="sunat_numero_identidad"/>
+                        </group>
+                    </group>
+
+                    <!-- Notas de crédito/débito -->
+                    <group invisible="not sunat_tipo_documento_id or (sunat_tipo_documento_id and not sunat_tipo_documento_id.nota_credito and not sunat_tipo_documento_id.nota_debito)">
+                        <group string="Referencia">
+                            <field name="sunat_documento_referencia"/>
+                            <field name="sunat_motivo_nota"/>
+                        </group>
+                    </group>
+
+                    <!-- Montos SUNAT -->
+                    <group string="Desglose Tributario">
+                        <group>
+                            <field name="sunat_monto_gravado" readonly="1"/>
+                            <field name="sunat_monto_igv" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="sunat_monto_exonerado" readonly="1"/>
+                            <field name="sunat_monto_inafecto" readonly="1"/>
+                            <field name="sunat_monto_gratuito" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Respuesta SUNAT -->
+                    <group string="Respuesta SUNAT"
+                           invisible="sunat_estado in ('borrador', 'por_enviar')">
+                        <group>
+                            <field name="sunat_fecha_envio" readonly="1"/>
+                            <field name="sunat_respuesta_codigo" readonly="1"/>
+                            <field name="sunat_hash" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="sunat_respuesta_descripcion" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Archivos XML -->
+                    <group string="Archivos XML"
+                           invisible="not sunat_xml_envio and not sunat_xml_respuesta">
+                        <group>
+                            <field name="sunat_xml_envio"
+                                   filename="sunat_xml_envio_filename"
+                                   readonly="1"/>
+                            <field name="sunat_xml_envio_filename" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="sunat_xml_respuesta"
+                                   filename="sunat_cdr_filename"
+                                   readonly="1"/>
+                            <field name="sunat_cdr_filename" invisible="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ==================== HEREDAR TREE VIEW ==================== -->
+    <record id="account_move_tree_view_sunat" model="ir.ui.view">
+        <field name="name">account.move.tree.sunat</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_out_invoice_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="sunat_numero" optional="show" string="Nro. SUNAT"/>
+                <field name="sunat_tipo_documento_id" optional="hide" string="Tipo Doc."/>
+                <field name="sunat_estado" optional="show" string="Estado SUNAT"
+                       widget="badge"
+                       decoration-success="sunat_estado == 'aceptado'"
+                       decoration-danger="sunat_estado == 'rechazado'"
+                       decoration-warning="sunat_estado in ('por_enviar', 'enviado')"
+                       decoration-info="sunat_estado == 'borrador'"
+                       decoration-muted="sunat_estado == 'anulado'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="account_move_search_view_sunat" model="ir.ui.view">
+        <field name="name">account.move.search.sunat</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="sunat_numero" string="Nro. SUNAT"/>
+                <separator/>
+                <filter string="Aceptados SUNAT" name="filter_aceptado"
+                        domain="[('sunat_estado', '=', 'aceptado')]"/>
+                <filter string="Por Enviar" name="filter_por_enviar"
+                        domain="[('sunat_estado', '=', 'por_enviar')]"/>
+                <filter string="Rechazados" name="filter_rechazado"
+                        domain="[('sunat_estado', '=', 'rechazado')]"/>
+                <filter string="Facturas" name="filter_facturas"
+                        domain="[('sunat_tipo_documento_id.code', '=', '01')]"/>
+                <filter string="Boletas" name="filter_boletas"
+                        domain="[('sunat_tipo_documento_id.code', '=', '03')]"/>
+                <separator/>
+                <filter string="Por Tipo Documento" name="group_tipo_doc"
+                        context="{'group_by': 'sunat_tipo_documento_id'}"/>
+                <filter string="Por Estado SUNAT" name="group_estado_sunat"
+                        context="{'group_by': 'sunat_estado'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== ACTIONS ==================== -->
+    <record id="action_facturas_electronicas" model="ir.actions.act_window">
+        <field name="name">Facturas Electrónicas</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[
+            ('move_type', '=', 'out_invoice'),
+            ('sunat_tipo_documento_id.code', '=', '01'),
+        ]</field>
+        <field name="context">{
+            'default_move_type': 'out_invoice',
+            'search_default_filter_facturas': 1,
+        }</field>
+    </record>
+
+    <record id="action_boletas_electronicas" model="ir.actions.act_window">
+        <field name="name">Boletas de Venta</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[
+            ('move_type', '=', 'out_invoice'),
+            ('sunat_tipo_documento_id.code', '=', '03'),
+        ]</field>
+        <field name="context">{
+            'default_move_type': 'out_invoice',
+        }</field>
+    </record>
+
+    <record id="action_notas_credito" model="ir.actions.act_window">
+        <field name="name">Notas de Crédito</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[
+            ('move_type', '=', 'out_refund'),
+        ]</field>
+        <field name="context">{
+            'default_move_type': 'out_refund',
+        }</field>
+    </record>
+
+    <record id="action_comprobantes_por_enviar" model="ir.actions.act_window">
+        <field name="name">Pendientes de Envío SUNAT</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[
+            ('sunat_estado', '=', 'por_enviar'),
+            ('move_type', 'in', ('out_invoice', 'out_refund')),
+        ]</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== FORM VIEW ==================== -->
+    <record id="view_caja_diaria_form" model="ir.ui.view">
+        <field name="name">ferreteria.caja.diaria.form</field>
+        <field name="model">ferreteria.caja.diaria</field>
+        <field name="arch" type="xml">
+            <form string="Caja Diaria">
+                <header>
+                    <button name="action_abrir_caja"
+                            type="object"
+                            string="Abrir Caja"
+                            class="btn-primary"
+                            invisible="state != 'borrador'"/>
+                    <button name="action_cerrar_caja"
+                            type="object"
+                            string="Cerrar Caja"
+                            class="btn-warning"
+                            invisible="state != 'abierta'"
+                            confirm="¿Cerrar la caja del día?"/>
+                    <button name="action_arquear_caja"
+                            type="object"
+                            string="Arquear Caja"
+                            class="btn-success"
+                            invisible="state != 'cerrada'"
+                            groups="group_admin_finanzas"/>
+                    <button name="action_reabrir_caja"
+                            type="object"
+                            string="Reabrir Caja"
+                            class="btn-secondary"
+                            invisible="state not in ('cerrada', 'arqueada')"
+                            groups="group_admin_finanzas"
+                            confirm="¿Reabrir esta caja?"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="borrador,abierta,cerrada,arqueada"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_ver_movimientos"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-exchange">
+                            <field name="movimiento_count" widget="statinfo"
+                                   string="Movimientos"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Información General">
+                            <field name="fecha"/>
+                            <field name="responsable_id"/>
+                            <field name="monto_apertura"
+                                   readonly="state != 'borrador'"/>
+                            <field name="hora_apertura"/>
+                            <field name="hora_cierre"/>
+                        </group>
+                        <group string="Resumen">
+                            <field name="total_ingresos"/>
+                            <field name="total_egresos"/>
+                            <field name="saldo_esperado"
+                                   decoration-success="saldo_esperado > 0"
+                                   decoration-danger="saldo_esperado &lt; 0"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Desglose de Ingresos">
+                            <field name="total_ventas_efectivo"/>
+                            <field name="total_ventas_tarjeta"/>
+                            <field name="total_ventas_transferencia"/>
+                        </group>
+                        <group string="Cierre y Arqueo">
+                            <field name="monto_cierre"
+                                   readonly="state not in ('abierta', 'cerrada')"/>
+                            <field name="diferencia"
+                                   decoration-success="diferencia == 0"
+                                   decoration-danger="diferencia != 0"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Movimientos" name="movimientos">
+                            <field name="movimiento_ids"
+                                   readonly="state != 'abierta'">
+                                <tree string="Movimientos"
+                                      decoration-success="tipo == 'ingreso'"
+                                      decoration-danger="tipo == 'egreso'"
+                                      editable="bottom">
+                                    <field name="fecha" widget="datetime"/>
+                                    <field name="tipo"/>
+                                    <field name="categoria"/>
+                                    <field name="descripcion"/>
+                                    <field name="metodo_pago"/>
+                                    <field name="monto" sum="Total"/>
+                                    <field name="partner_id" optional="show"/>
+                                    <field name="comprobante_ref" optional="show"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notas" name="notas">
+                            <field name="notas"
+                                   placeholder="Observaciones del día..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== TREE VIEW ==================== -->
+    <record id="view_caja_diaria_tree" model="ir.ui.view">
+        <field name="name">ferreteria.caja.diaria.tree</field>
+        <field name="model">ferreteria.caja.diaria</field>
+        <field name="arch" type="xml">
+            <tree string="Cajas Diarias"
+                  decoration-success="state == 'arqueada'"
+                  decoration-info="state == 'abierta'"
+                  decoration-warning="state == 'cerrada'"
+                  decoration-muted="state == 'borrador'">
+                <field name="name"/>
+                <field name="fecha"/>
+                <field name="responsable_id"/>
+                <field name="monto_apertura"/>
+                <field name="total_ingresos"/>
+                <field name="total_egresos"/>
+                <field name="saldo_esperado"/>
+                <field name="monto_cierre"/>
+                <field name="diferencia"
+                       decoration-danger="diferencia != 0"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'arqueada'"
+                       decoration-info="state == 'abierta'"
+                       decoration-warning="state == 'cerrada'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="view_caja_diaria_search" model="ir.ui.view">
+        <field name="name">ferreteria.caja.diaria.search</field>
+        <field name="model">ferreteria.caja.diaria</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Cajas">
+                <field name="name"/>
+                <field name="responsable_id"/>
+                <field name="fecha"/>
+                <separator/>
+                <filter string="Abiertas" name="filter_abiertas"
+                        domain="[('state', '=', 'abierta')]"/>
+                <filter string="Cerradas" name="filter_cerradas"
+                        domain="[('state', '=', 'cerrada')]"/>
+                <filter string="Con Diferencia" name="filter_diferencia"
+                        domain="[('diferencia', '!=', 0)]"/>
+                <filter string="Hoy" name="filter_today"
+                        domain="[('fecha', '=', context_today().strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="Este Mes" name="filter_month"
+                        domain="[('fecha', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Responsable" name="group_responsable"
+                            context="{'group_by': 'responsable_id'}"/>
+                    <filter string="Estado" name="group_state"
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Mes" name="group_mes"
+                            context="{'group_by': 'fecha:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_caja_diaria" model="ir.actions.act_window">
+        <field name="name">Caja Diaria</field>
+        <field name="res_model">ferreteria.caja.diaria</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_caja_diaria_search"/>
+        <field name="context">{'search_default_filter_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Abrir caja del día
+            </p>
+            <p>
+                Registre el monto de apertura y comience a registrar
+                ingresos y egresos del día.
+            </p>
+        </field>
+    </record>
+
+</odoo>

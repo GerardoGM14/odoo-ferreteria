@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== HEREDAR FORM VIEW ==================== -->
+    <record id="res_users_form_view_ferreteria" model="ir.ui.view">
+        <field name="name">res.users.form.ferreteria</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='preferences']" position="before">
+                <page string="Ferretería" name="ferreteria_usuario">
+                    <group>
+                        <group string="Perfil y Área">
+                            <field name="perfil_ferreteria_id"/>
+                            <field name="area_trabajo"/>
+                            <field name="turno"/>
+                        </group>
+                        <group string="Contacto">
+                            <field name="telefono_usuario"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notas_usuario"
+                               placeholder="Notas sobre el usuario..."/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== HEREDAR TREE VIEW ==================== -->
+    <record id="res_users_tree_view_ferreteria" model="ir.ui.view">
+        <field name="name">res.users.tree.ferreteria</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='login']" position="after">
+                <field name="perfil_ferreteria_id" optional="show"/>
+                <field name="area_trabajo" optional="show"/>
+                <field name="turno" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="res_users_search_view_ferreteria" model="ir.ui.view">
+        <field name="name">res.users.search.ferreteria</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter string="Por Perfil" name="group_perfil"
+                        context="{'group_by': 'perfil_ferreteria_id'}"/>
+                <filter string="Por Área" name="group_area"
+                        context="{'group_by': 'area_trabajo'}"/>
+                <filter string="Por Turno" name="group_turno"
+                        context="{'group_by': 'turno'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_usuarios_ferreteria" model="ir.actions.act_window">
+        <field name="name">Usuarios Ferretería</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('share', '=', False)]</field>
+        <field name="context">{'search_default_group_perfil': 1}</field>
+    </record>
+
+</odoo>

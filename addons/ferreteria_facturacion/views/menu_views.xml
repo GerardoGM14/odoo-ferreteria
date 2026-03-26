@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== SUBMENÚ FACTURACIÓN bajo Ferretería ==================== -->
+    <menuitem id="menu_ferreteria_facturacion"
+              name="Facturación"
+              parent="ferreteria_inventario.menu_ferreteria_root"
+              sequence="25"/>
+
+    <menuitem id="menu_facturas_electronicas"
+              name="Facturas Electrónicas"
+              parent="menu_ferreteria_facturacion"
+              action="action_facturas_electronicas"
+              sequence="10"/>
+
+    <menuitem id="menu_boletas_electronicas"
+              name="Boletas de Venta"
+              parent="menu_ferreteria_facturacion"
+              action="action_boletas_electronicas"
+              sequence="20"/>
+
+    <menuitem id="menu_notas_credito"
+              name="Notas de Crédito"
+              parent="menu_ferreteria_facturacion"
+              action="action_notas_credito"
+              sequence="30"/>
+
+    <menuitem id="menu_pendientes_envio"
+              name="Pendientes de Envío"
+              parent="menu_ferreteria_facturacion"
+              action="action_comprobantes_por_enviar"
+              sequence="40"/>
+
+    <!-- ==================== CONFIGURACIÓN SUNAT ==================== -->
+    <menuitem id="menu_config_sunat"
+              name="SUNAT"
+              parent="ferreteria_inventario.menu_ferreteria_config"
+              action="action_sunat_config"
+              sequence="20"
+              groups="group_admin_facturacion"/>
+
+    <menuitem id="menu_config_series"
+              name="Series de Comprobantes"
+              parent="ferreteria_inventario.menu_ferreteria_config"
+              action="action_serie_comprobante"
+              sequence="30"
+              groups="group_admin_facturacion"/>
+
+</odoo>

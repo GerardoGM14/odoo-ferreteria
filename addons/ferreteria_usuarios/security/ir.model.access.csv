@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_perfil_usuario_user,ferreteria.perfil.usuario.user,model_ferreteria_perfil_usuario,ferreteria_inventario.group_ferreteria_user,1,0,0,0
+access_perfil_usuario_admin,ferreteria.perfil.usuario.admin,model_ferreteria_perfil_usuario,group_admin_usuarios,1,1,1,1

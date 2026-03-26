@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Grupo: Administrador de Usuarios (solo gerencia) -->
+    <record id="group_admin_usuarios" model="res.groups">
+        <field name="name">Administrador de Usuarios</field>
+        <field name="category_id" ref="ferreteria_inventario.module_category_ferreteria"/>
+        <field name="implied_ids" eval="[(4, ref('ferreteria_inventario.group_ferreteria_manager'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="cat_herramientas" model="ferreteria.categoria">
+        <field name="name">Herramientas</field>
+        <field name="code">HER</field>
+        <field name="icon">fa fa-wrench</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="cat_pinturas" model="ferreteria.categoria">
+        <field name="name">Pinturas</field>
+        <field name="code">PIN</field>
+        <field name="icon">fa fa-paint-brush</field>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="cat_electricidad" model="ferreteria.categoria">
+        <field name="name">Electricidad</field>
+        <field name="code">ELE</field>
+        <field name="icon">fa fa-bolt</field>
+        <field name="sequence">3</field>
+    </record>
+
+    <record id="cat_gasfiteria" model="ferreteria.categoria">
+        <field name="name">Gasfitería</field>
+        <field name="code">GAS</field>
+        <field name="icon">fa fa-tint</field>
+        <field name="sequence">4</field>
+    </record>
+
+    <record id="cat_plomeria" model="ferreteria.categoria">
+        <field name="name">Plomería</field>
+        <field name="code">PLO</field>
+        <field name="icon">fa fa-shower</field>
+        <field name="sequence">5</field>
+    </record>
+
+    <record id="cat_tornilleria" model="ferreteria.categoria">
+        <field name="name">Tornillería</field>
+        <field name="code">TOR</field>
+        <field name="icon">fa fa-cog</field>
+        <field name="sequence">6</field>
+    </record>
+
+    <record id="cat_cerrajeria" model="ferreteria.categoria">
+        <field name="name">Cerrajería</field>
+        <field name="code">CER</field>
+        <field name="icon">fa fa-key</field>
+        <field name="sequence">7</field>
+    </record>
+
+    <record id="cat_seguridad" model="ferreteria.categoria">
+        <field name="name">Seguridad Industrial</field>
+        <field name="code">SEG</field>
+        <field name="icon">fa fa-shield</field>
+        <field name="sequence">8</field>
+    </record>
+
+    <record id="cat_iluminacion" model="ferreteria.categoria">
+        <field name="name">Iluminación</field>
+        <field name="code">ILU</field>
+        <field name="icon">fa fa-lightbulb-o</field>
+        <field name="sequence">9</field>
+    </record>
+
+    <record id="cat_otros" model="ferreteria.categoria">
+        <field name="name">Otros</field>
+        <field name="code">OTR</field>
+        <field name="icon">fa fa-th-large</field>
+        <field name="sequence">99</field>
+    </record>
+
+</odoo>

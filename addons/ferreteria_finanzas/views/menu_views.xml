@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== SUBMENÚ FINANZAS ==================== -->
+    <menuitem id="menu_ferreteria_finanzas"
+              name="Finanzas"
+              parent="ferreteria_inventario.menu_ferreteria_root"
+              sequence="30"/>
+
+    <!-- Caja -->
+    <menuitem id="menu_caja_diaria"
+              name="Caja Diaria"
+              parent="menu_ferreteria_finanzas"
+              action="action_caja_diaria"
+              sequence="10"/>
+
+    <menuitem id="menu_movimientos_caja"
+              name="Movimientos de Caja"
+              parent="menu_ferreteria_finanzas"
+              action="action_movimiento_caja"
+              sequence="20"/>
+
+    <!-- Cuentas -->
+    <menuitem id="menu_cuentas_cobrar"
+              name="Cuentas por Cobrar"
+              parent="menu_ferreteria_finanzas"
+              action="action_cuentas_cobrar"
+              sequence="30"/>
+
+    <menuitem id="menu_cuentas_vencidas"
+              name="Cuentas Vencidas"
+              parent="menu_ferreteria_finanzas"
+              action="action_cuentas_vencidas"
+              sequence="40"/>
+
+    <!-- Reportes -->
+    <menuitem id="menu_reportes_finanzas"
+              name="Reportes"
+              parent="menu_ferreteria_finanzas"
+              sequence="50"
+              groups="group_admin_finanzas"/>
+
+    <menuitem id="menu_reporte_ventas_diarias"
+              name="Ventas Diarias"
+              parent="menu_reportes_finanzas"
+              action="action_reporte_ventas_diarias"
+              sequence="10"/>
+
+    <menuitem id="menu_reporte_flujo_caja"
+              name="Flujo de Caja"
+              parent="menu_reportes_finanzas"
+              action="action_reporte_flujo_caja"
+              sequence="20"/>
+
+    <menuitem id="menu_reporte_cxc"
+              name="Resumen Cuentas por Cobrar"
+              parent="menu_reportes_finanzas"
+              action="action_reporte_cxc"
+              sequence="30"/>
+
+</odoo>

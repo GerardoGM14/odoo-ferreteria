@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== FORM VIEW ==================== -->
+    <record id="view_cuenta_cobrar_form" model="ir.ui.view">
+        <field name="name">ferreteria.cuenta.cobrar.form</field>
+        <field name="model">ferreteria.cuenta.cobrar</field>
+        <field name="arch" type="xml">
+            <form string="Cuenta por Cobrar">
+                <header>
+                    <button name="action_cancelar"
+                            type="object"
+                            string="Cancelar Cuenta"
+                            class="btn-danger"
+                            invisible="state in ('pagada', 'cancelada')"
+                            confirm="¿Cancelar esta cuenta por cobrar?"
+                            groups="group_admin_finanzas"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="pendiente,parcial,pagada"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Datos de la Cuenta">
+                            <field name="partner_id"/>
+                            <field name="sale_order_id"/>
+                            <field name="invoice_id"/>
+                            <field name="monto_total"/>
+                        </group>
+                        <group string="Fechas y Estado">
+                            <field name="fecha_emision"/>
+                            <field name="fecha_vencimiento"/>
+                            <field name="dias_mora"
+                                   decoration-danger="dias_mora > 0"/>
+                            <field name="monto_pagado"/>
+                            <field name="monto_pendiente"
+                                   decoration-danger="monto_pendiente > 0"
+                                   decoration-success="monto_pendiente == 0"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Pagos" name="pagos">
+                            <field name="pago_ids"
+                                   readonly="state in ('pagada', 'cancelada')">
+                                <tree string="Pagos" editable="bottom">
+                                    <field name="fecha"/>
+                                    <field name="monto" sum="Total Pagado"/>
+                                    <field name="metodo_pago"/>
+                                    <field name="referencia"/>
+                                    <field name="usuario_id" readonly="1"/>
+                                    <field name="notas" optional="hide"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notas" name="notas">
+                            <field name="notas"
+                                   placeholder="Notas sobre la cuenta..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== TREE VIEW ==================== -->
+    <record id="view_cuenta_cobrar_tree" model="ir.ui.view">
+        <field name="name">ferreteria.cuenta.cobrar.tree</field>
+        <field name="model">ferreteria.cuenta.cobrar</field>
+        <field name="arch" type="xml">
+            <tree string="Cuentas por Cobrar"
+                  decoration-danger="state == 'vencida'"
+                  decoration-warning="state == 'parcial'"
+                  decoration-success="state == 'pagada'"
+                  decoration-muted="state == 'cancelada'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="fecha_emision"/>
+                <field name="fecha_vencimiento"/>
+                <field name="monto_total" sum="Total Deuda"/>
+                <field name="monto_pagado" sum="Total Pagado"/>
+                <field name="monto_pendiente" sum="Total Pendiente"/>
+                <field name="dias_mora"
+                       decoration-danger="dias_mora > 0"/>
+                <field name="state" widget="badge"
+                       decoration-danger="state == 'vencida'"
+                       decoration-warning="state == 'parcial'"
+                       decoration-success="state == 'pagada'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="view_cuenta_cobrar_search" model="ir.ui.view">
+        <field name="name">ferreteria.cuenta.cobrar.search</field>
+        <field name="model">ferreteria.cuenta.cobrar</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Cuentas">
+                <field name="partner_id"/>
+                <field name="name"/>
+                <separator/>
+                <filter string="Pendientes" name="filter_pendientes"
+                        domain="[('state', '=', 'pendiente')]"/>
+                <filter string="Pago Parcial" name="filter_parcial"
+                        domain="[('state', '=', 'parcial')]"/>
+                <filter string="Vencidas" name="filter_vencidas"
+                        domain="[('state', '=', 'vencida')]"/>
+                <filter string="Pagadas" name="filter_pagadas"
+                        domain="[('state', '=', 'pagada')]"/>
+                <separator/>
+                <filter string="Vencen Hoy" name="filter_vence_hoy"
+                        domain="[('fecha_vencimiento', '=', context_today().strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="Vencen Esta Semana" name="filter_vence_semana"
+                        domain="[('fecha_vencimiento', '&gt;=', context_today().strftime('%%Y-%%m-%%d')),
+                                 ('fecha_vencimiento', '&lt;=', (context_today() + datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"/>
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Cliente" name="group_cliente"
+                            context="{'group_by': 'partner_id'}"/>
+                    <filter string="Estado" name="group_state"
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Mes Vencimiento" name="group_vencimiento"
+                            context="{'group_by': 'fecha_vencimiento:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ==================== ACTIONS ==================== -->
+    <record id="action_cuentas_cobrar" model="ir.actions.act_window">
+        <field name="name">Cuentas por Cobrar</field>
+        <field name="res_model">ferreteria.cuenta.cobrar</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_cuenta_cobrar_search"/>
+        <field name="context">{'search_default_filter_pendientes': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay cuentas por cobrar pendientes
+            </p>
+        </field>
+    </record>
+
+    <record id="action_cuentas_vencidas" model="ir.actions.act_window">
+        <field name="name">Cuentas Vencidas</field>
+        <field name="res_model">ferreteria.cuenta.cobrar</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'vencida')]</field>
+    </record>
+
+</odoo>

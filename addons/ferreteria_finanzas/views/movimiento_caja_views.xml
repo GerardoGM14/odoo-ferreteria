@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== FORM VIEW ==================== -->
+    <record id="view_movimiento_caja_form" model="ir.ui.view">
+        <field name="name">ferreteria.movimiento.caja.form</field>
+        <field name="model">ferreteria.movimiento.caja</field>
+        <field name="arch" type="xml">
+            <form string="Movimiento de Caja">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="caja_diaria_id"/>
+                            <field name="fecha"/>
+                            <field name="tipo" widget="radio"/>
+                            <field name="categoria"/>
+                        </group>
+                        <group>
+                            <field name="metodo_pago"/>
+                            <field name="monto"/>
+                            <field name="descripcion"/>
+                            <field name="comprobante_ref"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="sale_order_id"/>
+                            <field name="invoice_id"/>
+                        </group>
+                        <group>
+                            <field name="usuario_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notas" placeholder="Notas adicionales..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== TREE VIEW ==================== -->
+    <record id="view_movimiento_caja_tree" model="ir.ui.view">
+        <field name="name">ferreteria.movimiento.caja.tree</field>
+        <field name="model">ferreteria.movimiento.caja</field>
+        <field name="arch" type="xml">
+            <tree string="Movimientos de Caja"
+                  decoration-success="tipo == 'ingreso'"
+                  decoration-danger="tipo == 'egreso'">
+                <field name="name"/>
+                <field name="fecha" widget="datetime"/>
+                <field name="caja_diaria_id" optional="show"/>
+                <field name="tipo"/>
+                <field name="categoria"/>
+                <field name="descripcion"/>
+                <field name="metodo_pago"/>
+                <field name="monto" sum="Total"/>
+                <field name="partner_id" optional="show"/>
+                <field name="comprobante_ref" optional="hide"/>
+                <field name="usuario_id" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="view_movimiento_caja_search" model="ir.ui.view">
+        <field name="name">ferreteria.movimiento.caja.search</field>
+        <field name="model">ferreteria.movimiento.caja</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Movimientos">
+                <field name="descripcion"/>
+                <field name="partner_id"/>
+                <field name="comprobante_ref"/>
+                <separator/>
+                <filter string="Ingresos" name="filter_ingresos"
+                        domain="[('tipo', '=', 'ingreso')]"/>
+                <filter string="Egresos" name="filter_egresos"
+                        domain="[('tipo', '=', 'egreso')]"/>
+                <separator/>
+                <filter string="Efectivo" name="filter_efectivo"
+                        domain="[('metodo_pago', '=', 'efectivo')]"/>
+                <filter string="Tarjeta" name="filter_tarjeta"
+                        domain="[('metodo_pago', '=', 'tarjeta')]"/>
+                <filter string="Yape/Plin" name="filter_yape"
+                        domain="[('metodo_pago', '=', 'yape_plin')]"/>
+                <separator/>
+                <filter string="Hoy" name="filter_today"
+                        domain="[('fecha', '&gt;=', context_today().strftime('%%Y-%%m-%%d')),
+                                 ('fecha', '&lt;', (context_today() + datetime.timedelta(days=1)).strftime('%%Y-%%m-%%d'))]"/>
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Tipo" name="group_tipo"
+                            context="{'group_by': 'tipo'}"/>
+                    <filter string="Categoría" name="group_categoria"
+                            context="{'group_by': 'categoria'}"/>
+                    <filter string="Método Pago" name="group_metodo"
+                            context="{'group_by': 'metodo_pago'}"/>
+                    <filter string="Fecha" name="group_fecha"
+                            context="{'group_by': 'fecha:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_movimiento_caja" model="ir.actions.act_window">
+        <field name="name">Movimientos de Caja</field>
+        <field name="res_model">ferreteria.movimiento.caja</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_movimiento_caja_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Registrar un movimiento de caja
+            </p>
+        </field>
+    </record>
+
+</odoo>

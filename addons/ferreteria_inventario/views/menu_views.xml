@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== ACCIÓN PRINCIPAL DE PRODUCTOS ==================== -->
+    <record id="action_ferreteria_productos" model="ir.actions.act_window">
+        <field name="name">Productos Ferretería</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('es_ferreteria', '=', True)]</field>
+        <field name="context">{'default_es_ferreteria': True, 'search_default_filter_ferreteria': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear un nuevo producto de ferretería
+            </p>
+            <p>
+                Registra tus productos con categoría, marca, ubicación y stock mínimo.
+            </p>
+        </field>
+    </record>
+
+    <!-- ==================== MENÚ RAÍZ ==================== -->
+    <menuitem id="menu_ferreteria_root"
+              name="Ferretería"
+              sequence="10"/>
+
+    <!-- ==================== MENÚ NIVEL 1 ==================== -->
+    <menuitem id="menu_ferreteria_productos"
+              name="Productos"
+              parent="menu_ferreteria_root"
+              action="action_ferreteria_productos"
+              sequence="10"/>
+
+    <menuitem id="menu_ferreteria_categorias"
+              name="Categorías"
+              parent="menu_ferreteria_root"
+              action="action_ferreteria_categoria"
+              sequence="20"/>
+
+    <menuitem id="menu_ferreteria_kardex"
+              name="Kardex"
+              parent="menu_ferreteria_root"
+              action="action_ferreteria_kardex"
+              sequence="30"/>
+
+    <menuitem id="menu_ferreteria_alertas"
+              name="Alertas de Stock"
+              parent="menu_ferreteria_root"
+              action="action_stock_alert"
+              sequence="40"/>
+
+    <!-- ==================== SUBMENÚ CONFIGURACIÓN ==================== -->
+    <menuitem id="menu_ferreteria_config"
+              name="Configuración"
+              parent="menu_ferreteria_root"
+              sequence="100"
+              groups="group_ferreteria_manager"/>
+
+    <menuitem id="menu_ferreteria_precios"
+              name="Listas de Precios"
+              parent="menu_ferreteria_config"
+              action="sale.product_pricelist_action2"
+              sequence="10"/>
+
+</odoo>

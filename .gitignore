@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Docker volumes
+odoo-web-data/
+odoo-db-data/
+
+# Odoo
+*.pyc
+filestore/
+
+# Claude Code
+.claude/
+
+# Logs
+*.log
+
+# Environment / secrets
+.env
+*.pem
+*.key

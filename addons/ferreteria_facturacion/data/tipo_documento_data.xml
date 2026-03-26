@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Tipos de Documento Electrónico SUNAT -->
+    <record id="tipo_doc_factura" model="sunat.tipo.documento">
+        <field name="name">Factura Electrónica</field>
+        <field name="code">01</field>
+        <field name="prefix">F</field>
+        <field name="genera_xml" eval="True"/>
+    </record>
+
+    <record id="tipo_doc_boleta" model="sunat.tipo.documento">
+        <field name="name">Boleta de Venta Electrónica</field>
+        <field name="code">03</field>
+        <field name="prefix">B</field>
+        <field name="genera_xml" eval="True"/>
+    </record>
+
+    <record id="tipo_doc_nota_credito" model="sunat.tipo.documento">
+        <field name="name">Nota de Crédito Electrónica</field>
+        <field name="code">07</field>
+        <field name="prefix">F</field>
+        <field name="genera_xml" eval="True"/>
+        <field name="nota_credito" eval="True"/>
+    </record>
+
+    <record id="tipo_doc_nota_debito" model="sunat.tipo.documento">
+        <field name="name">Nota de Débito Electrónica</field>
+        <field name="code">08</field>
+        <field name="prefix">F</field>
+        <field name="genera_xml" eval="True"/>
+        <field name="nota_debito" eval="True"/>
+    </record>
+
+    <record id="tipo_doc_guia_remision" model="sunat.tipo.documento">
+        <field name="name">Guía de Remisión</field>
+        <field name="code">09</field>
+        <field name="prefix">T</field>
+        <field name="genera_xml" eval="True"/>
+    </record>
+
+    <record id="tipo_doc_ticket" model="sunat.tipo.documento">
+        <field name="name">Ticket o Cinta de Máquina Registradora</field>
+        <field name="code">12</field>
+        <field name="prefix">T</field>
+        <field name="genera_xml" eval="False"/>
+    </record>
+
+</odoo>

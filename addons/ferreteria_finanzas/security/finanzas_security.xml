@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Grupo: Cajero -->
+    <record id="group_cajero" model="res.groups">
+        <field name="name">Cajero</field>
+        <field name="category_id" ref="ferreteria_inventario.module_category_ferreteria"/>
+        <field name="implied_ids" eval="[(4, ref('ferreteria_inventario.group_ferreteria_user'))]"/>
+    </record>
+
+    <!-- Grupo: Administrador Financiero -->
+    <record id="group_admin_finanzas" model="res.groups">
+        <field name="name">Administrador Financiero</field>
+        <field name="category_id" ref="ferreteria_inventario.module_category_ferreteria"/>
+        <field name="implied_ids" eval="[(4, ref('group_cajero'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- Regla: Cajero solo ve sus cajas -->
+    <record id="rule_caja_cajero" model="ir.rule">
+        <field name="name">Caja: Cajero ve sus cajas</field>
+        <field name="model_id" ref="model_ferreteria_caja_diaria"/>
+        <field name="domain_force">[('responsable_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_cajero'))]"/>
+    </record>
+
+    <!-- Regla: Admin Financiero ve todas las cajas -->
+    <record id="rule_caja_admin" model="ir.rule">
+        <field name="name">Caja: Admin ve todas las cajas</field>
+        <field name="model_id" ref="model_ferreteria_caja_diaria"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_admin_finanzas'))]"/>
+    </record>
+
+</odoo>

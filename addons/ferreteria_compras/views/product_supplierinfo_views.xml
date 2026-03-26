@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== VISTA DE PRECIOS DE PROVEEDOR ==================== -->
+    <!-- Vista dedicada para ver todos los precios de proveedores por producto -->
+    <record id="view_product_supplierinfo_ferreteria_tree" model="ir.ui.view">
+        <field name="name">product.supplierinfo.ferreteria.tree</field>
+        <field name="model">product.supplierinfo</field>
+        <field name="arch" type="xml">
+            <tree string="Precios de Proveedores"
+                  decoration-info="min_qty > 0">
+                <field name="product_tmpl_id" string="Producto"/>
+                <field name="partner_id" string="Proveedor"/>
+                <field name="min_qty" string="Cantidad Mín."/>
+                <field name="price" string="Precio"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="delay" string="Días Entrega"/>
+                <field name="date_start" optional="hide"/>
+                <field name="date_end" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="view_product_supplierinfo_ferreteria_search" model="ir.ui.view">
+        <field name="name">product.supplierinfo.ferreteria.search</field>
+        <field name="model">product.supplierinfo</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Precios de Proveedores">
+                <field name="product_tmpl_id" string="Producto"/>
+                <field name="partner_id" string="Proveedor"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Proveedor" name="group_proveedor"
+                            context="{'group_by': 'partner_id'}"/>
+                    <filter string="Producto" name="group_producto"
+                            context="{'group_by': 'product_tmpl_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_product_supplierinfo_ferreteria" model="ir.actions.act_window">
+        <field name="name">Precios de Proveedores</field>
+        <field name="res_model">product.supplierinfo</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_product_supplierinfo_ferreteria_tree"/>
+        <field name="search_view_id" ref="view_product_supplierinfo_ferreteria_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay precios de proveedores registrados
+            </p>
+            <p>
+                Los precios se registran automáticamente al confirmar
+                órdenes de compra o manualmente en cada producto.
+            </p>
+        </field>
+    </record>
+
+</odoo>

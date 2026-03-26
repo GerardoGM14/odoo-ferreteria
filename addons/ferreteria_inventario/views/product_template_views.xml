@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== HEREDAR FORM VIEW ==================== -->
+    <record id="product_template_form_view_ferreteria" model="ir.ui.view">
+        <field name="name">product.template.form.ferreteria</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+
+            <!-- Checkbox "Producto de Ferretería" en opciones -->
+            <xpath expr="//div[@name='options']" position="inside">
+                <span class="d-inline-block">
+                    <field name="es_ferreteria"/>
+                    <label for="es_ferreteria"/>
+                </span>
+            </xpath>
+
+            <!-- Pestaña Ferretería después de información general -->
+            <xpath expr="//page[@name='general_information']" position="after">
+                <page string="Ferretería" name="ferreteria"
+                      invisible="not es_ferreteria">
+                    <group>
+                        <group string="Clasificación">
+                            <field name="ferreteria_categoria_id"/>
+                            <field name="marca"/>
+                            <field name="unidad_ferreteria"/>
+                        </group>
+                        <group string="Almacén">
+                            <field name="stock_minimo"/>
+                            <field name="ubicacion_almacen"/>
+                            <field name="stock_bajo_minimo"
+                                   widget="boolean"
+                                   readonly="1"
+                                   invisible="stock_minimo == 0"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ==================== HEREDAR TREE VIEW ==================== -->
+    <record id="product_template_tree_view_ferreteria" model="ir.ui.view">
+        <field name="name">product.template.tree.ferreteria</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="ferreteria_categoria_id" string="Cat. Ferretería"
+                       optional="show"/>
+                <field name="marca" optional="hide"/>
+                <field name="ubicacion_almacen" optional="hide"/>
+                <field name="stock_minimo" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW (herencia) ==================== -->
+    <record id="product_template_search_view_ferreteria" model="ir.ui.view">
+        <field name="name">product.template.search.ferreteria</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="ferreteria_categoria_id" string="Categoría Ferretería"/>
+                <field name="marca" string="Marca"/>
+                <field name="ubicacion_almacen" string="Ubicación"/>
+                <separator/>
+                <filter string="Productos Ferretería" name="filter_ferreteria"
+                        domain="[('es_ferreteria', '=', True)]"/>
+                <filter string="Stock Bajo Mínimo" name="below_minimum"
+                        domain="[('stock_bajo_minimo', '=', True)]"/>
+                <separator/>
+                <filter string="Por Categoría Ferretería" name="group_ferreteria_cat"
+                        context="{'group_by': 'ferreteria_categoria_id'}"/>
+                <filter string="Por Marca" name="group_marca"
+                        context="{'group_by': 'marca'}"/>
+                <filter string="Por Ubicación" name="group_ubicacion"
+                        context="{'group_by': 'ubicacion_almacen'}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

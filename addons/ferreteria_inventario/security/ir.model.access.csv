@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ferreteria_categoria_user,ferreteria.categoria.user,model_ferreteria_categoria,group_ferreteria_user,1,0,0,0
+access_ferreteria_categoria_manager,ferreteria.categoria.manager,model_ferreteria_categoria,group_ferreteria_manager,1,1,1,1
+access_ferreteria_kardex_user,ferreteria.kardex.user,model_ferreteria_kardex,group_ferreteria_user,1,0,0,0
+access_ferreteria_kardex_manager,ferreteria.kardex.manager,model_ferreteria_kardex,group_ferreteria_manager,1,0,0,0

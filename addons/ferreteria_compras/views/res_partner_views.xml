@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== HEREDAR FORM VIEW ==================== -->
+    <record id="res_partner_form_view_proveedor" model="ir.ui.view">
+        <field name="name">res.partner.form.proveedor.ferreteria</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+
+            <!-- Botón de historial de compras -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="%(purchase.action_purchase_order_report_all)d"
+                        type="action"
+                        class="oe_stat_button"
+                        icon="fa-truck"
+                        invisible="not es_proveedor_ferreteria"
+                        context="{'search_default_partner_id': active_id}">
+                    <field name="total_compras_count" widget="statinfo" string="Compras"/>
+                </button>
+            </xpath>
+
+            <!-- Pestaña Proveedor Ferretería -->
+            <xpath expr="//page[@name='internal_notes']" position="before">
+                <page string="Proveedor Ferretería" name="proveedor_ferreteria"
+                      invisible="not es_proveedor_ferreteria">
+                    <group>
+                        <group string="Datos del Proveedor">
+                            <field name="tipo_proveedor"/>
+                            <field name="ruc_proveedor"/>
+                            <field name="calificacion_proveedor" widget="priority"/>
+                            <field name="categorias_proveedor_ids"
+                                   widget="many2many_tags"/>
+                        </group>
+                        <group string="Condiciones Comerciales">
+                            <field name="condicion_pago_compra"/>
+                            <field name="dias_entrega"/>
+                            <field name="total_comprado_proveedor" widget="monetary"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Contacto Comercial">
+                            <field name="contacto_ventas"/>
+                            <field name="telefono_ventas"/>
+                        </group>
+                        <group string="Datos Bancarios">
+                            <field name="banco_proveedor"/>
+                            <field name="cuenta_bancaria_proveedor"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notas_proveedor"
+                               placeholder="Acuerdos, condiciones especiales, observaciones..."/>
+                    </group>
+                </page>
+            </xpath>
+
+            <!-- Checkbox proveedor ferretería -->
+            <xpath expr="//group[@name='purchase']" position="before">
+                <group>
+                    <field name="es_proveedor_ferreteria"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ==================== HEREDAR TREE VIEW ==================== -->
+    <record id="res_partner_tree_view_proveedor" model="ir.ui.view">
+        <field name="name">res.partner.tree.proveedor.ferreteria</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='city']" position="after">
+                <field name="tipo_proveedor" optional="show"/>
+                <field name="calificacion_proveedor" widget="priority" optional="show"/>
+                <field name="dias_entrega" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="res_partner_search_view_proveedor" model="ir.ui.view">
+        <field name="name">res.partner.search.proveedor.ferreteria</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="ruc_proveedor" string="RUC Proveedor"/>
+                <separator/>
+                <filter string="Proveedores Ferretería" name="filter_proveedor_ferreteria"
+                        domain="[('es_proveedor_ferreteria', '=', True)]"/>
+                <filter string="Fabricantes" name="filter_fabricante"
+                        domain="[('tipo_proveedor', '=', 'fabricante')]"/>
+                <filter string="Distribuidores" name="filter_distribuidor"
+                        domain="[('tipo_proveedor', '=', 'distribuidor')]"/>
+                <filter string="Importadores" name="filter_importador"
+                        domain="[('tipo_proveedor', '=', 'importador')]"/>
+                <separator/>
+                <filter string="Por Tipo" name="group_tipo_proveedor"
+                        context="{'group_by': 'tipo_proveedor'}"/>
+                <filter string="Por Calificación" name="group_calificacion"
+                        context="{'group_by': 'calificacion_proveedor'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_proveedores_ferreteria" model="ir.actions.act_window">
+        <field name="name">Proveedores Ferretería</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('es_proveedor_ferreteria', '=', True)]</field>
+        <field name="context">{
+            'default_es_proveedor_ferreteria': True,
+            'default_supplier_rank': 1,
+            'search_default_filter_proveedor_ferreteria': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Registrar un nuevo proveedor
+            </p>
+            <p>
+                Registra proveedores con tipo, categorías que surte,
+                condiciones de pago y datos bancarios.
+            </p>
+        </field>
+    </record>
+
+</odoo>
