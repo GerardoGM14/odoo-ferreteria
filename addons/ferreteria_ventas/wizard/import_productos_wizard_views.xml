@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== WIZARD FORM VIEW ==================== -->
+    <record id="view_import_productos_wizard_form" model="ir.ui.view">
+        <field name="name">ferreteria.import.productos.wizard.form</field>
+        <field name="model">ferreteria.import.productos.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Importar Productos desde Excel">
+                <!-- Estado: Borrador (formulario de carga) -->
+                <group invisible="state != 'draft'">
+                    <group>
+                        <field name="file" filename="filename"/>
+                        <field name="filename" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="update_existing"/>
+                        <field name="import_mode"/>
+                    </group>
+                    <separator string="Formato esperado del archivo"/>
+                    <div class="alert alert-info" role="alert">
+                        <p><strong>El archivo Excel debe tener el siguiente formato:</strong></p>
+                        <ul>
+                            <li>Columna A: Código/Clave del producto</li>
+                            <li>Columna D: Descripción del producto</li>
+                            <li>Columna I: Precio Mayoreo 1 (precio base)</li>
+                            <li>Columna L: Precio Mayoreo 2</li>
+                            <li>Columna M: Precio Mayoreo 3</li>
+                            <li>Columna P: Precio Mayoreo 4</li>
+                        </ul>
+                        <p>Las filas con "Cantidad" en columna F se usan como referencia de departamento/proveedor.</p>
+                    </div>
+                </group>
+
+                <!-- Estado: Completado (resultado) -->
+                <group invisible="state != 'done'">
+                    <div class="alert alert-success" role="alert">
+                        <field name="result_message" readonly="1" widget="text"/>
+                    </div>
+                </group>
+
+                <field name="state" invisible="1"/>
+
+                <footer>
+                    <button string="Importar Productos"
+                            name="action_import"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button string="Cerrar"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_import_productos_wizard" model="ir.actions.act_window">
+        <field name="name">Importar Productos Excel</field>
+        <field name="res_model">ferreteria.import.productos.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

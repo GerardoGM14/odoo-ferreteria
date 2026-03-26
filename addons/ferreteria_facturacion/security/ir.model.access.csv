@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sunat_tipo_documento_user,sunat.tipo.documento.user,model_sunat_tipo_documento,group_facturador,1,0,0,0
+access_sunat_tipo_documento_admin,sunat.tipo.documento.admin,model_sunat_tipo_documento,group_admin_facturacion,1,1,1,1
+access_sunat_tipo_identidad_user,sunat.tipo.identidad.user,model_sunat_tipo_identidad,group_facturador,1,0,0,0
+access_sunat_tipo_identidad_admin,sunat.tipo.identidad.admin,model_sunat_tipo_identidad,group_admin_facturacion,1,1,1,1
+access_sunat_config_admin,sunat.config.admin,model_sunat_config,group_admin_facturacion,1,1,1,1
+access_sunat_serie_user,sunat.serie.comprobante.user,model_sunat_serie_comprobante,group_facturador,1,0,0,0
+access_sunat_serie_admin,sunat.serie.comprobante.admin,model_sunat_serie_comprobante,group_admin_facturacion,1,1,1,1

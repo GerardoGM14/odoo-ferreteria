@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== TREE VIEW ==================== -->
+    <record id="view_ferreteria_categoria_tree" model="ir.ui.view">
+        <field name="name">ferreteria.categoria.tree</field>
+        <field name="model">ferreteria.categoria</field>
+        <field name="arch" type="xml">
+            <tree string="Categorías">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="parent_id" optional="show"/>
+                <field name="product_count" string="Productos"/>
+                <field name="active" column_invisible="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ==================== FORM VIEW ==================== -->
+    <record id="view_ferreteria_categoria_form" model="ir.ui.view">
+        <field name="name">ferreteria.categoria.form</field>
+        <field name="model">ferreteria.categoria</field>
+        <field name="arch" type="xml">
+            <form string="Categoría">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_ferreteria_productos_by_categoria)d"
+                                type="action"
+                                class="oe_stat_button"
+                                icon="fa-cubes"
+                                invisible="product_count == 0">
+                            <field name="product_count" widget="statinfo" string="Productos"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archivado"
+                            bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nombre de la categoría..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="parent_id"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="icon"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Descripción de la categoría..."/>
+                    </group>
+                    <notebook>
+                        <page string="Subcategorías" name="subcategorias">
+                            <field name="child_ids">
+                                <tree string="Subcategorías">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="product_count" string="Productos"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== KANBAN VIEW ==================== -->
+    <record id="view_ferreteria_categoria_kanban" model="ir.ui.view">
+        <field name="name">ferreteria.categoria.kanban</field>
+        <field name="model">ferreteria.categoria</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="icon"/>
+                <field name="code"/>
+                <field name="product_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top mb-0">
+                                <div class="o_kanban_record_headleft">
+                                    <strong>
+                                        <i t-att-class="record.icon.raw_value or 'fa fa-th-large'"
+                                           style="margin-right: 8px;"/>
+                                        <field name="name"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <span class="badge rounded-pill text-bg-primary">
+                                        <field name="product_count"/> productos
+                                    </span>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <span class="text-muted">
+                                        <field name="code"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="view_ferreteria_categoria_search" model="ir.ui.view">
+        <field name="name">ferreteria.categoria.search</field>
+        <field name="model">ferreteria.categoria</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Categorías">
+                <field name="name" string="Nombre"/>
+                <field name="code" string="Código"/>
+                <field name="parent_id"/>
+                <filter string="Archivados" name="inactive"
+                        domain="[('active', '=', False)]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Categoría Padre" name="group_parent"
+                            context="{'group_by': 'parent_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ==================== ACTIONS ==================== -->
+    <record id="action_ferreteria_categoria" model="ir.actions.act_window">
+        <field name="name">Categorías Ferretería</field>
+        <field name="res_model">ferreteria.categoria</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_ferreteria_categoria_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear una nueva categoría
+            </p>
+            <p>
+                Las categorías te permiten organizar los productos de tu ferretería.
+            </p>
+        </field>
+    </record>
+
+    <!-- Acción para ver productos de una categoría (desde stat button) -->
+    <record id="action_ferreteria_productos_by_categoria" model="ir.actions.act_window">
+        <field name="name">Productos</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('ferreteria_categoria_id', '=', active_id)]</field>
+        <field name="context">{'default_es_ferreteria': True, 'default_ferreteria_categoria_id': active_id}</field>
+    </record>
+
+</odoo>

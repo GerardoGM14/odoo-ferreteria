@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== HEREDAR FORM VIEW ==================== -->
+    <record id="purchase_order_form_view_ferreteria" model="ir.ui.view">
+        <field name="name">purchase.order.form.ferreteria</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Tipo de compra y fecha de entrega esperada -->
+            <xpath expr="//field[@name='date_order']" position="after">
+                <field name="tipo_compra"/>
+                <field name="fecha_entrega_esperada"/>
+                <field name="proveedor_tipo" readonly="1"/>
+            </xpath>
+
+            <!-- Estado de recepción -->
+            <xpath expr="//field[@name='date_order']" position="before">
+                <field name="recibido" widget="boolean" readonly="1"
+                       invisible="state not in ('purchase', 'done')"/>
+            </xpath>
+
+            <!-- Campos extra en líneas de compra -->
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+                <field name="stock_actual" optional="show" string="Stock"/>
+                <field name="stock_minimo" optional="hide"/>
+                <field name="diferencia_precio" optional="show" string="Dif. Precio"
+                       decoration-danger="diferencia_precio &gt; 0"
+                       decoration-success="diferencia_precio &lt; 0"/>
+                <field name="ferreteria_categoria_id" optional="hide"/>
+            </xpath>
+
+            <!-- Botón para crear desde alertas de stock -->
+            <xpath expr="//button[@name='action_create_invoice']" position="after">
+                <button name="action_crear_desde_alertas_stock"
+                        type="object"
+                        string="Agregar Productos Bajo Stock"
+                        class="btn-secondary"
+                        invisible="state != 'draft'"
+                        groups="group_jefe_compras"/>
+            </xpath>
+
+            <!-- Notas de compra -->
+            <xpath expr="//page[@name='purchase_delivery_invoice']" position="after">
+                <page string="Notas Ferretería" name="notas_ferreteria">
+                    <group>
+                        <field name="compras_notas"
+                               placeholder="Instrucciones, notas internas de la compra..."/>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ==================== HEREDAR TREE VIEW ==================== -->
+    <record id="purchase_order_tree_view_ferreteria" model="ir.ui.view">
+        <field name="name">purchase.order.tree.ferreteria</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="tipo_compra" optional="show"/>
+                <field name="fecha_entrega_esperada" optional="show"/>
+                <field name="recibido" optional="show" widget="boolean"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="purchase_order_search_view_ferreteria" model="ir.ui.view">
+        <field name="name">purchase.order.search.ferreteria</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter string="Reposición" name="filter_reposicion"
+                        domain="[('tipo_compra', '=', 'reposicion')]"/>
+                <filter string="Pedido de Cliente" name="filter_pedido_cliente"
+                        domain="[('tipo_compra', '=', 'pedido_cliente')]"/>
+                <filter string="Compras Urgentes" name="filter_urgente"
+                        domain="[('tipo_compra', '=', 'urgente')]"/>
+                <filter string="Pendientes de Recibir" name="filter_no_recibido"
+                        domain="[('recibido', '=', False), ('state', '=', 'purchase')]"/>
+                <separator/>
+                <filter string="Por Tipo de Compra" name="group_tipo_compra"
+                        context="{'group_by': 'tipo_compra'}"/>
+                <filter string="Por Proveedor" name="group_proveedor"
+                        context="{'group_by': 'partner_id'}"/>
+                <filter string="Por Fecha Entrega" name="group_fecha_entrega"
+                        context="{'group_by': 'fecha_entrega_esperada:month'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== ACTIONS ==================== -->
+    <record id="action_compras_ferreteria" model="ir.actions.act_window">
+        <field name="name">Órdenes de Compra</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="context">{'default_tipo_compra': 'reposicion'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear una nueva orden de compra
+            </p>
+            <p>
+                Gestiona tus compras con control de precios, tiempos de entrega
+                y comparación de costos.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_compras_pendientes" model="ir.actions.act_window">
+        <field name="name">Pendientes de Recibir</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('recibido', '=', False), ('state', '=', 'purchase')]</field>
+    </record>
+
+    <record id="action_solicitud_cotizacion" model="ir.actions.act_window">
+        <field name="name">Solicitudes de Cotización</field>
+        <field name="res_model">purchase.order</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('state', 'in', ('draft', 'sent'))]</field>
+        <field name="context">{'default_tipo_compra': 'reposicion'}</field>
+    </record>
+
+</odoo>

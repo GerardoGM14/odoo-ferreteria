@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="pricelist_mayoreo1" model="product.pricelist">
+        <field name="name">Mayoreo 1 - Precio Base</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="pricelist_mayoreo2" model="product.pricelist">
+        <field name="name">Mayoreo 2</field>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="pricelist_mayoreo3" model="product.pricelist">
+        <field name="name">Mayoreo 3</field>
+        <field name="sequence">3</field>
+    </record>
+
+    <record id="pricelist_mayoreo4" model="product.pricelist">
+        <field name="name">Mayoreo 4</field>
+        <field name="sequence">4</field>
+    </record>
+
+</odoo>

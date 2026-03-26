@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== CONFIGURACIÓN DE USUARIOS ==================== -->
+    <menuitem id="menu_config_perfiles"
+              name="Perfiles de Usuario"
+              parent="ferreteria_inventario.menu_ferreteria_config"
+              action="action_perfil_usuario"
+              sequence="40"
+              groups="group_admin_usuarios"/>
+
+    <menuitem id="menu_config_usuarios"
+              name="Usuarios"
+              parent="ferreteria_inventario.menu_ferreteria_config"
+              action="action_usuarios_ferreteria"
+              sequence="50"
+              groups="group_admin_usuarios"/>
+
+</odoo>

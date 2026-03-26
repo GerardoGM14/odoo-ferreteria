@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== HEREDAR FORM VIEW ==================== -->
+    <record id="res_partner_form_view_ferreteria" model="ir.ui.view">
+        <field name="name">res.partner.form.ferreteria</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Agregar botón de historial en button_box -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="%(sale.action_quotations_with_onboarding)d"
+                        type="action"
+                        class="oe_stat_button"
+                        icon="fa-shopping-cart"
+                        invisible="not es_cliente_ferreteria"
+                        context="{'search_default_partner_id': active_id}">
+                    <field name="historial_compras_count" widget="statinfo" string="Compras"/>
+                </button>
+            </xpath>
+
+            <!-- Pestaña Ferretería en el formulario de contacto -->
+            <xpath expr="//page[@name='internal_notes']" position="before">
+                <page string="Ferretería" name="ferreteria_cliente"
+                      invisible="not es_cliente_ferreteria">
+                    <group>
+                        <group string="Datos del Cliente">
+                            <field name="tipo_cliente"/>
+                            <field name="ruc"/>
+                            <field name="dni"/>
+                        </group>
+                        <group string="Condiciones Comerciales">
+                            <field name="limite_credito" widget="monetary"/>
+                            <field name="dias_credito"/>
+                            <field name="property_product_pricelist"
+                                   string="Lista de Precios"/>
+                            <field name="total_comprado" widget="monetary"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notas_ferreteria"
+                               placeholder="Notas internas sobre el cliente..."/>
+                    </group>
+                </page>
+            </xpath>
+
+            <!-- Checkbox Ferretería junto a las opciones del partner -->
+            <xpath expr="//group[@name='sale']" position="before">
+                <group>
+                    <field name="es_cliente_ferreteria"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ==================== HEREDAR TREE VIEW ==================== -->
+    <record id="res_partner_tree_view_ferreteria" model="ir.ui.view">
+        <field name="name">res.partner.tree.ferreteria</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='city']" position="after">
+                <field name="tipo_cliente" optional="show"/>
+                <field name="ruc" optional="show"/>
+                <field name="total_comprado" optional="hide" widget="monetary"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="res_partner_search_view_ferreteria" model="ir.ui.view">
+        <field name="name">res.partner.search.ferreteria</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="ruc" string="RUC"/>
+                <field name="dni" string="DNI"/>
+                <separator/>
+                <filter string="Clientes Ferretería" name="filter_ferreteria"
+                        domain="[('es_cliente_ferreteria', '=', True)]"/>
+                <filter string="Mayoristas" name="filter_mayorista"
+                        domain="[('tipo_cliente', '=', 'mayorista')]"/>
+                <filter string="Contratistas" name="filter_contratista"
+                        domain="[('tipo_cliente', '=', 'contratista')]"/>
+                <filter string="Empresas" name="filter_empresa"
+                        domain="[('tipo_cliente', '=', 'empresa')]"/>
+                <separator/>
+                <filter string="Por Tipo de Cliente" name="group_tipo"
+                        context="{'group_by': 'tipo_cliente'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_clientes_ferreteria" model="ir.actions.act_window">
+        <field name="name">Clientes Ferretería</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('es_cliente_ferreteria', '=', True)]</field>
+        <field name="context">{
+            'default_es_cliente_ferreteria': True,
+            'default_customer_rank': 1,
+            'search_default_filter_ferreteria': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear un nuevo cliente de ferretería
+            </p>
+            <p>
+                Registra clientes con tipo (mostrador, mayorista, contratista, empresa),
+                límites de crédito y lista de precios asignada.
+            </p>
+        </field>
+    </record>
+
+</odoo>

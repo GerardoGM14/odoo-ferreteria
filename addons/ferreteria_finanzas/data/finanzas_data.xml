@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Secuencia para Caja Diaria -->
+    <record id="seq_caja_diaria" model="ir.sequence">
+        <field name="name">Caja Diaria Ferretería</field>
+        <field name="code">ferreteria.caja.diaria</field>
+        <field name="prefix">CAJA-%(year)s%(month)s-</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Secuencia para Movimientos de Caja -->
+    <record id="seq_movimiento_caja" model="ir.sequence">
+        <field name="name">Movimiento de Caja</field>
+        <field name="code">ferreteria.movimiento.caja</field>
+        <field name="prefix">MOV-%(year)s-</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Secuencia para Cuentas por Cobrar -->
+    <record id="seq_cuenta_cobrar" model="ir.sequence">
+        <field name="name">Cuenta por Cobrar Ferretería</field>
+        <field name="code">ferreteria.cuenta.cobrar</field>
+        <field name="prefix">CXC-%(year)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Cron: Marcar cuentas vencidas -->
+    <record id="cron_cuentas_vencidas" model="ir.cron">
+        <field name="name">Ferretería: Marcar Cuentas Vencidas</field>
+        <field name="model_id" ref="model_ferreteria_cuenta_cobrar"/>
+        <field name="state">code</field>
+        <field name="code">model.action_marcar_vencidas()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="True"/>
+    </record>
+
+</odoo>

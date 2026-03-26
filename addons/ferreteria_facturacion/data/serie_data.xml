@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Series por defecto -->
+    <record id="serie_factura_f001" model="sunat.serie.comprobante">
+        <field name="name">F001</field>
+        <field name="tipo_documento_id" ref="tipo_doc_factura"/>
+        <field name="punto_emision">Principal</field>
+    </record>
+
+    <record id="serie_boleta_b001" model="sunat.serie.comprobante">
+        <field name="name">B001</field>
+        <field name="tipo_documento_id" ref="tipo_doc_boleta"/>
+        <field name="punto_emision">Principal</field>
+    </record>
+
+    <record id="serie_nc_fc01" model="sunat.serie.comprobante">
+        <field name="name">FC01</field>
+        <field name="tipo_documento_id" ref="tipo_doc_nota_credito"/>
+        <field name="punto_emision">Principal</field>
+    </record>
+
+    <record id="serie_nd_fd01" model="sunat.serie.comprobante">
+        <field name="name">FD01</field>
+        <field name="tipo_documento_id" ref="tipo_doc_nota_debito"/>
+        <field name="punto_emision">Principal</field>
+    </record>
+
+    <record id="serie_nc_bc01" model="sunat.serie.comprobante">
+        <field name="name">BC01</field>
+        <field name="tipo_documento_id" ref="tipo_doc_nota_credito"/>
+        <field name="punto_emision">Principal - Boletas</field>
+    </record>
+
+</odoo>

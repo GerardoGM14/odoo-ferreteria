@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== SUBMENÚ VENTAS bajo Ferretería ==================== -->
+    <menuitem id="menu_ferreteria_ventas"
+              name="Ventas"
+              parent="ferreteria_inventario.menu_ferreteria_root"
+              sequence="15"/>
+
+    <menuitem id="menu_ventas_mostrador"
+              name="Venta Mostrador"
+              parent="menu_ferreteria_ventas"
+              action="action_ventas_mostrador"
+              sequence="10"/>
+
+    <menuitem id="menu_cotizaciones"
+              name="Cotizaciones"
+              parent="menu_ferreteria_ventas"
+              action="action_cotizaciones_ferreteria"
+              sequence="20"/>
+
+    <menuitem id="menu_ventas_credito"
+              name="Ventas a Crédito"
+              parent="menu_ferreteria_ventas"
+              action="action_ventas_credito"
+              sequence="30"/>
+
+    <!-- ==================== CLIENTES ==================== -->
+    <menuitem id="menu_clientes_ferreteria"
+              name="Clientes"
+              parent="ferreteria_inventario.menu_ferreteria_root"
+              action="action_clientes_ferreteria"
+              sequence="50"/>
+
+    <!-- ==================== HERRAMIENTAS / IMPORTACIÓN ==================== -->
+    <menuitem id="menu_ferreteria_herramientas"
+              name="Herramientas"
+              parent="ferreteria_inventario.menu_ferreteria_root"
+              sequence="90"
+              groups="group_supervisor_ventas"/>
+
+    <menuitem id="menu_import_productos"
+              name="Importar Productos (Excel)"
+              parent="menu_ferreteria_herramientas"
+              action="action_import_productos_wizard"
+              sequence="10"/>
+
+</odoo>

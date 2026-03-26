@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Catálogo 06: Tipos de Documento de Identidad SUNAT -->
+    <record id="tipo_id_doc_no_domiciliado" model="sunat.tipo.identidad">
+        <field name="name">DOC. TRIB. NO DOM. SIN RUC</field>
+        <field name="code">0</field>
+        <field name="longitud">0</field>
+    </record>
+
+    <record id="tipo_id_dni" model="sunat.tipo.identidad">
+        <field name="name">DNI - Documento Nacional de Identidad</field>
+        <field name="code">1</field>
+        <field name="longitud">8</field>
+    </record>
+
+    <record id="tipo_id_carnet_extranjeria" model="sunat.tipo.identidad">
+        <field name="name">Carnet de Extranjería</field>
+        <field name="code">4</field>
+        <field name="longitud">0</field>
+    </record>
+
+    <record id="tipo_id_ruc" model="sunat.tipo.identidad">
+        <field name="name">RUC - Registro Único de Contribuyentes</field>
+        <field name="code">6</field>
+        <field name="longitud">11</field>
+    </record>
+
+    <record id="tipo_id_pasaporte" model="sunat.tipo.identidad">
+        <field name="name">Pasaporte</field>
+        <field name="code">7</field>
+        <field name="longitud">0</field>
+    </record>
+
+    <record id="tipo_id_ced_diplomatica" model="sunat.tipo.identidad">
+        <field name="name">Cédula Diplomática de Identidad</field>
+        <field name="code">A</field>
+        <field name="longitud">0</field>
+    </record>
+
+    <record id="tipo_id_no_identificado" model="sunat.tipo.identidad">
+        <field name="name">No Domiciliado, sin RUC (exportación)</field>
+        <field name="code">B</field>
+        <field name="longitud">0</field>
+    </record>
+
+</odoo>

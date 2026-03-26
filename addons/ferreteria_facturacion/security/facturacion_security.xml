@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Grupo: Facturador -->
+    <record id="group_facturador" model="res.groups">
+        <field name="name">Facturador</field>
+        <field name="category_id" ref="ferreteria_inventario.module_category_ferreteria"/>
+        <field name="implied_ids" eval="[(4, ref('ferreteria_inventario.group_ferreteria_user'))]"/>
+    </record>
+
+    <!-- Grupo: Administrador de Facturación -->
+    <record id="group_admin_facturacion" model="res.groups">
+        <field name="name">Administrador Facturación</field>
+        <field name="category_id" ref="ferreteria_inventario.module_category_ferreteria"/>
+        <field name="implied_ids" eval="[(4, ref('group_facturador'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+</odoo>

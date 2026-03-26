@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== SUBMENÚ COMPRAS bajo Ferretería ==================== -->
+    <menuitem id="menu_ferreteria_compras"
+              name="Compras"
+              parent="ferreteria_inventario.menu_ferreteria_root"
+              sequence="20"/>
+
+    <menuitem id="menu_solicitudes_cotizacion"
+              name="Solicitudes de Cotización"
+              parent="menu_ferreteria_compras"
+              action="action_solicitud_cotizacion"
+              sequence="10"/>
+
+    <menuitem id="menu_ordenes_compra"
+              name="Órdenes de Compra"
+              parent="menu_ferreteria_compras"
+              action="action_compras_ferreteria"
+              sequence="20"/>
+
+    <menuitem id="menu_compras_pendientes"
+              name="Pendientes de Recibir"
+              parent="menu_ferreteria_compras"
+              action="action_compras_pendientes"
+              sequence="30"/>
+
+    <menuitem id="menu_precios_proveedores"
+              name="Precios de Proveedores"
+              parent="menu_ferreteria_compras"
+              action="action_product_supplierinfo_ferreteria"
+              sequence="40"/>
+
+    <!-- ==================== PROVEEDORES ==================== -->
+    <menuitem id="menu_proveedores_ferreteria"
+              name="Proveedores"
+              parent="ferreteria_inventario.menu_ferreteria_root"
+              action="action_proveedores_ferreteria"
+              sequence="55"/>
+
+</odoo>

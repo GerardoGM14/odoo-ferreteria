@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== FORM VIEW ==================== -->
+    <record id="view_sunat_config_form" model="ir.ui.view">
+        <field name="name">sunat.config.form</field>
+        <field name="model">sunat.config</field>
+        <field name="arch" type="xml">
+            <form string="Configuración SUNAT">
+                <header>
+                    <button name="action_test_connection"
+                            type="object"
+                            string="Probar Conexión"
+                            class="btn-primary"
+                            icon="fa-plug"/>
+                    <field name="estado_conexion" widget="statusbar"
+                           statusbar_visible="sin_configurar,configurado"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            Configuración SUNAT
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Datos de la Empresa">
+                            <field name="company_id"
+                                   groups="base.group_multi_company"/>
+                            <field name="ruc_empresa"/>
+                            <field name="razon_social"/>
+                            <field name="nombre_comercial"/>
+                            <field name="direccion_fiscal"/>
+                            <field name="ubigeo"/>
+                        </group>
+                        <group string="Conexión SUNAT">
+                            <field name="ambiente" widget="radio"/>
+                            <field name="usuario_sol"/>
+                            <field name="clave_sol" password="True"/>
+                            <field name="url_factura" readonly="1"/>
+                            <field name="url_consulta" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Certificado Digital">
+                            <field name="certificado" filename="certificado_filename"/>
+                            <field name="certificado_filename" invisible="1"/>
+                            <field name="certificado_password" password="True"/>
+                        </group>
+                        <group string="Configuración Tributaria">
+                            <field name="igv_porcentaje"/>
+                            <field name="ultimo_test" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== TREE VIEW ==================== -->
+    <record id="view_sunat_config_tree" model="ir.ui.view">
+        <field name="name">sunat.config.tree</field>
+        <field name="model">sunat.config</field>
+        <field name="arch" type="xml">
+            <tree string="Configuraciones SUNAT">
+                <field name="company_id"/>
+                <field name="ruc_empresa"/>
+                <field name="razon_social"/>
+                <field name="ambiente"/>
+                <field name="estado_conexion"
+                       decoration-success="estado_conexion == 'configurado'"
+                       decoration-danger="estado_conexion == 'error'"
+                       decoration-warning="estado_conexion == 'sin_configurar'"
+                       widget="badge"/>
+                <field name="ultimo_test"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_sunat_config" model="ir.actions.act_window">
+        <field name="name">Configuración SUNAT</field>
+        <field name="res_model">sunat.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configurar conexión con SUNAT
+            </p>
+            <p>
+                Ingrese los datos de conexión SOL, certificado digital
+                y seleccione el ambiente (Beta o Producción).
+            </p>
+        </field>
+    </record>
+
+</odoo>

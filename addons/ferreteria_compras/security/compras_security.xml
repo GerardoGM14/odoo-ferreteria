@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Grupo: Comprador Ferretería -->
+    <record id="group_comprador_ferreteria" model="res.groups">
+        <field name="name">Comprador</field>
+        <field name="category_id" ref="ferreteria_inventario.module_category_ferreteria"/>
+        <field name="implied_ids" eval="[(4, ref('ferreteria_inventario.group_ferreteria_user'))]"/>
+    </record>
+
+    <!-- Grupo: Jefe de Compras -->
+    <record id="group_jefe_compras" model="res.groups">
+        <field name="name">Jefe de Compras</field>
+        <field name="category_id" ref="ferreteria_inventario.module_category_ferreteria"/>
+        <field name="implied_ids" eval="[(4, ref('group_comprador_ferreteria'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- Regla: Compradores ven solo sus OC -->
+    <record id="rule_purchase_order_comprador" model="ir.rule">
+        <field name="name">Compras: Comprador ve sus OC</field>
+        <field name="model_id" ref="purchase.model_purchase_order"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_comprador_ferreteria'))]"/>
+    </record>
+
+    <!-- Regla: Jefe de Compras ve todas -->
+    <record id="rule_purchase_order_jefe" model="ir.rule">
+        <field name="name">Compras: Jefe ve todas las OC</field>
+        <field name="model_id" ref="purchase.model_purchase_order"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_jefe_compras'))]"/>
+    </record>
+
+</odoo>

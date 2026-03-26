@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== TREE VIEW para alertas ==================== -->
+    <record id="view_stock_alert_tree" model="ir.ui.view">
+        <field name="name">product.template.stock.alert.tree</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <tree string="Alertas de Stock"
+                  decoration-danger="stock_bajo_minimo == True"
+                  create="false">
+                <field name="name"/>
+                <field name="ferreteria_categoria_id" string="Categoría"/>
+                <field name="marca" optional="show"/>
+                <field name="ubicacion_almacen" optional="show"/>
+                <field name="qty_available" string="Stock Actual"/>
+                <field name="stock_minimo" string="Stock Mínimo"/>
+                <field name="stock_bajo_minimo" column_invisible="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW para alertas ==================== -->
+    <record id="view_stock_alert_search" model="ir.ui.view">
+        <field name="name">product.template.stock.alert.search</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <search string="Alertas de Stock">
+                <field name="name"/>
+                <field name="ferreteria_categoria_id"/>
+                <field name="marca"/>
+                <filter string="Bajo Mínimo" name="below_minimum"
+                        domain="[('stock_bajo_minimo', '=', True)]"/>
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Categoría" name="group_cat"
+                            context="{'group_by': 'ferreteria_categoria_id'}"/>
+                    <filter string="Marca" name="group_marca"
+                            context="{'group_by': 'marca'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_stock_alert" model="ir.actions.act_window">
+        <field name="name">Alertas de Stock</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_stock_alert_tree"/>
+        <field name="search_view_id" ref="view_stock_alert_search"/>
+        <field name="domain">[('es_ferreteria', '=', True), ('stock_minimo', '>', 0)]</field>
+        <field name="context">{'search_default_below_minimum': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Sin alertas de stock
+            </p>
+            <p>
+                Todos los productos de ferretería están por encima del stock mínimo configurado.
+            </p>
+        </field>
+    </record>
+
+</odoo>

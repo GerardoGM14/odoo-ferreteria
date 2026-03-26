@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Secuencia personalizada para órdenes de compra ferretería -->
+    <record id="seq_ferreteria_compra" model="ir.sequence">
+        <field name="name">Compra Ferretería</field>
+        <field name="code">ferreteria.purchase.order</field>
+        <field name="prefix">FC-%(year)s-</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+</odoo>

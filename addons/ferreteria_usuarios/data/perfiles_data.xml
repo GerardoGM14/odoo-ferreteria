@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- ==================== PERFIL: VENDEDOR ==================== -->
+    <record id="perfil_vendedor" model="ferreteria.perfil.usuario">
+        <field name="name">Vendedor de Mostrador</field>
+        <field name="code">VENDEDOR</field>
+        <field name="sequence">10</field>
+        <field name="color">10</field>
+        <field name="description">Acceso a ventas, productos y clientes. No puede modificar precios ni configuraciones.</field>
+        <field name="modulos_acceso">Productos (lectura), Ventas (crear/editar), Clientes (crear/editar), Kardex (lectura)</field>
+        <field name="restricciones">No puede modificar precios, no puede ver reportes financieros, no puede acceder a compras ni configuración.</field>
+        <field name="group_ids" eval="[
+            (4, ref('ferreteria_inventario.group_ferreteria_user')),
+            (4, ref('ferreteria_ventas.group_vendedor_ferreteria')),
+            (4, ref('ferreteria_facturacion.group_facturador')),
+        ]"/>
+    </record>
+
+    <!-- ==================== PERFIL: ALMACENERO ==================== -->
+    <record id="perfil_almacenero" model="ferreteria.perfil.usuario">
+        <field name="name">Almacenero</field>
+        <field name="code">ALMACEN</field>
+        <field name="sequence">20</field>
+        <field name="color">4</field>
+        <field name="description">Acceso completo a inventario, productos y recepción de mercadería.</field>
+        <field name="modulos_acceso">Productos (completo), Categorías (lectura), Kardex (lectura), Alertas de Stock, Compras (lectura)</field>
+        <field name="restricciones">No puede acceder a ventas, finanzas ni facturación. No puede modificar precios de venta.</field>
+        <field name="group_ids" eval="[
+            (4, ref('ferreteria_inventario.group_ferreteria_user')),
+            (4, ref('ferreteria_compras.group_comprador_ferreteria')),
+        ]"/>
+    </record>
+
+    <!-- ==================== PERFIL: CAJERO ==================== -->
+    <record id="perfil_cajero" model="ferreteria.perfil.usuario">
+        <field name="name">Cajero</field>
+        <field name="code">CAJERO</field>
+        <field name="sequence">30</field>
+        <field name="color">3</field>
+        <field name="description">Acceso a caja diaria, cobranzas y emisión de comprobantes.</field>
+        <field name="modulos_acceso">Caja Diaria (completo), Movimientos (crear), Cuentas por Cobrar (lectura/pago), Facturación (emitir)</field>
+        <field name="restricciones">No puede ver reportes gerenciales, no puede modificar productos ni compras.</field>
+        <field name="group_ids" eval="[
+            (4, ref('ferreteria_inventario.group_ferreteria_user')),
+            (4, ref('ferreteria_ventas.group_vendedor_ferreteria')),
+            (4, ref('ferreteria_facturacion.group_facturador')),
+            (4, ref('ferreteria_finanzas.group_cajero')),
+        ]"/>
+    </record>
+
+    <!-- ==================== PERFIL: COMPRADOR ==================== -->
+    <record id="perfil_comprador" model="ferreteria.perfil.usuario">
+        <field name="name">Comprador</field>
+        <field name="code">COMPRAS</field>
+        <field name="sequence">40</field>
+        <field name="color">5</field>
+        <field name="description">Acceso a compras, proveedores y control de abastecimiento.</field>
+        <field name="modulos_acceso">Compras (completo), Proveedores (completo), Productos (lectura), Alertas de Stock</field>
+        <field name="restricciones">No puede acceder a caja, finanzas ni facturación de ventas.</field>
+        <field name="group_ids" eval="[
+            (4, ref('ferreteria_inventario.group_ferreteria_user')),
+            (4, ref('ferreteria_compras.group_jefe_compras')),
+        ]"/>
+    </record>
+
+    <!-- ==================== PERFIL: GERENTE ==================== -->
+    <record id="perfil_gerente" model="ferreteria.perfil.usuario">
+        <field name="name">Gerente General</field>
+        <field name="code">GERENTE</field>
+        <field name="sequence">50</field>
+        <field name="color">1</field>
+        <field name="description">Acceso completo a todos los módulos. Reportes, configuración y gestión de usuarios.</field>
+        <field name="modulos_acceso">Todos los módulos con acceso completo</field>
+        <field name="restricciones">Sin restricciones</field>
+        <field name="group_ids" eval="[
+            (4, ref('ferreteria_inventario.group_ferreteria_manager')),
+            (4, ref('ferreteria_ventas.group_supervisor_ventas')),
+            (4, ref('ferreteria_compras.group_jefe_compras')),
+            (4, ref('ferreteria_facturacion.group_admin_facturacion')),
+            (4, ref('ferreteria_finanzas.group_admin_finanzas')),
+            (4, ref('group_admin_usuarios')),
+        ]"/>
+    </record>
+
+</odoo>

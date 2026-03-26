@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== HEREDAR FORM VIEW ==================== -->
+    <record id="sale_order_form_view_ferreteria" model="ir.ui.view">
+        <field name="name">sale.order.form.ferreteria</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Agregar tipo de venta y descuento en el encabezado -->
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="tipo_venta"/>
+                <field name="cliente_tipo" readonly="1"/>
+            </xpath>
+
+            <!-- Descuento global -->
+            <xpath expr="//field[@name='payment_term_id']" position="before">
+                <label for="descuento_global"/>
+                <div class="d-flex align-items-center">
+                    <field name="descuento_global" class="oe_inline"/>
+                    <span class="ms-1">%</span>
+                    <button name="action_apply_descuento_global"
+                            type="object"
+                            string="Aplicar"
+                            class="btn-link ms-2"
+                            invisible="descuento_global == 0"/>
+                </div>
+            </xpath>
+
+            <!-- Agregar campos de ferretería en las líneas de orden -->
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom_qty']" position="after">
+                <field name="ubicacion_producto" optional="show" string="Ubicación"/>
+            </xpath>
+
+            <!-- Notas de venta -->
+            <xpath expr="//page[@name='note']" position="inside">
+                <group>
+                    <field name="ferreteria_notas"
+                           placeholder="Notas internas de la venta..."/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ==================== HEREDAR TREE VIEW ==================== -->
+    <record id="sale_order_tree_view_ferreteria" model="ir.ui.view">
+        <field name="name">sale.order.tree.ferreteria</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="tipo_venta" optional="show"/>
+                <field name="cliente_tipo" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="sale_order_search_view_ferreteria" model="ir.ui.view">
+        <field name="name">sale.order.search.ferreteria</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_sale"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter string="Venta Mostrador" name="filter_mostrador"
+                        domain="[('tipo_venta', '=', 'mostrador')]"/>
+                <filter string="Cotizaciones" name="filter_cotizacion"
+                        domain="[('tipo_venta', '=', 'cotizacion')]"/>
+                <filter string="Ventas a Crédito" name="filter_credito"
+                        domain="[('tipo_venta', '=', 'credito')]"/>
+                <filter string="Pedidos Especiales" name="filter_pedido"
+                        domain="[('tipo_venta', '=', 'pedido')]"/>
+                <separator/>
+                <filter string="Por Tipo de Venta" name="group_tipo_venta"
+                        context="{'group_by': 'tipo_venta'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ==================== ACTIONS ==================== -->
+    <record id="action_ventas_mostrador" model="ir.actions.act_window">
+        <field name="name">Ventas Mostrador</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('tipo_venta', '=', 'mostrador')]</field>
+        <field name="context">{'default_tipo_venta': 'mostrador'}</field>
+    </record>
+
+    <record id="action_cotizaciones_ferreteria" model="ir.actions.act_window">
+        <field name="name">Cotizaciones</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('tipo_venta', '=', 'cotizacion')]</field>
+        <field name="context">{'default_tipo_venta': 'cotizacion'}</field>
+    </record>
+
+    <record id="action_ventas_credito" model="ir.actions.act_window">
+        <field name="name">Ventas a Crédito</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('tipo_venta', '=', 'credito')]</field>
+        <field name="context">{'default_tipo_venta': 'credito'}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_caja_diaria_cajero,ferreteria.caja.diaria.cajero,model_ferreteria_caja_diaria,group_cajero,1,1,1,0
+access_caja_diaria_admin,ferreteria.caja.diaria.admin,model_ferreteria_caja_diaria,group_admin_finanzas,1,1,1,1
+access_movimiento_caja_cajero,ferreteria.movimiento.caja.cajero,model_ferreteria_movimiento_caja,group_cajero,1,1,1,0
+access_movimiento_caja_admin,ferreteria.movimiento.caja.admin,model_ferreteria_movimiento_caja,group_admin_finanzas,1,1,1,1
+access_cuenta_cobrar_cajero,ferreteria.cuenta.cobrar.cajero,model_ferreteria_cuenta_cobrar,group_cajero,1,0,0,0
+access_cuenta_cobrar_admin,ferreteria.cuenta.cobrar.admin,model_ferreteria_cuenta_cobrar,group_admin_finanzas,1,1,1,1
+access_pago_cuenta_cajero,ferreteria.pago.cuenta.cajero,model_ferreteria_pago_cuenta,group_cajero,1,1,1,0
+access_pago_cuenta_admin,ferreteria.pago.cuenta.admin,model_ferreteria_pago_cuenta,group_admin_finanzas,1,1,1,1
+access_reporte_ventas_cajero,ferreteria.reporte.ventas.cajero,model_ferreteria_reporte_ventas_diarias,group_cajero,1,0,0,0
+access_reporte_ventas_admin,ferreteria.reporte.ventas.admin,model_ferreteria_reporte_ventas_diarias,group_admin_finanzas,1,0,0,0
+access_reporte_flujo_admin,ferreteria.reporte.flujo.admin,model_ferreteria_reporte_flujo_caja,group_admin_finanzas,1,0,0,0
+access_reporte_cxc_admin,ferreteria.reporte.cxc.admin,model_ferreteria_reporte_cuentas_cobrar,group_admin_finanzas,1,0,0,0

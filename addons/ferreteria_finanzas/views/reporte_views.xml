@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== VENTAS DIARIAS ==================== -->
+    <record id="view_reporte_ventas_diarias_tree" model="ir.ui.view">
+        <field name="name">ferreteria.reporte.ventas.diarias.tree</field>
+        <field name="model">ferreteria.reporte.ventas.diarias</field>
+        <field name="arch" type="xml">
+            <tree string="Ventas Diarias" create="false" edit="false" delete="false">
+                <field name="fecha"/>
+                <field name="vendedor_id"/>
+                <field name="cantidad_ordenes" sum="Total Órdenes"/>
+                <field name="total_ventas" sum="Total Ventas"/>
+                <field name="ticket_promedio" avg="Promedio"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_reporte_ventas_diarias_search" model="ir.ui.view">
+        <field name="name">ferreteria.reporte.ventas.diarias.search</field>
+        <field name="model">ferreteria.reporte.ventas.diarias</field>
+        <field name="arch" type="xml">
+            <search string="Ventas Diarias">
+                <field name="vendedor_id"/>
+                <filter string="Hoy" name="filter_hoy"
+                        domain="[('fecha', '=', context_today().strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="Este Mes" name="filter_mes"
+                        domain="[('fecha', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Vendedor" name="group_vendedor"
+                            context="{'group_by': 'vendedor_id'}"/>
+                    <filter string="Mes" name="group_mes"
+                            context="{'group_by': 'fecha:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_reporte_ventas_diarias" model="ir.actions.act_window">
+        <field name="name">Ventas Diarias</field>
+        <field name="res_model">ferreteria.reporte.ventas.diarias</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_reporte_ventas_diarias_search"/>
+        <field name="context">{'search_default_filter_mes': 1}</field>
+    </record>
+
+    <!-- ==================== FLUJO DE CAJA ==================== -->
+    <record id="view_reporte_flujo_caja_tree" model="ir.ui.view">
+        <field name="name">ferreteria.reporte.flujo.caja.tree</field>
+        <field name="model">ferreteria.reporte.flujo.caja</field>
+        <field name="arch" type="xml">
+            <tree string="Flujo de Caja" create="false" edit="false" delete="false"
+                  decoration-success="flujo_neto > 0"
+                  decoration-danger="flujo_neto &lt; 0">
+                <field name="fecha"/>
+                <field name="categoria"/>
+                <field name="metodo_pago"/>
+                <field name="total_ingresos" sum="Total Ingresos"/>
+                <field name="total_egresos" sum="Total Egresos"/>
+                <field name="flujo_neto" sum="Flujo Neto"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_reporte_flujo_caja_search" model="ir.ui.view">
+        <field name="name">ferreteria.reporte.flujo.caja.search</field>
+        <field name="model">ferreteria.reporte.flujo.caja</field>
+        <field name="arch" type="xml">
+            <search string="Flujo de Caja">
+                <filter string="Este Mes" name="filter_mes"
+                        domain="[('fecha', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Categoría" name="group_cat"
+                            context="{'group_by': 'categoria'}"/>
+                    <filter string="Método Pago" name="group_metodo"
+                            context="{'group_by': 'metodo_pago'}"/>
+                    <filter string="Fecha" name="group_fecha"
+                            context="{'group_by': 'fecha:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_reporte_flujo_caja" model="ir.actions.act_window">
+        <field name="name">Flujo de Caja</field>
+        <field name="res_model">ferreteria.reporte.flujo.caja</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_reporte_flujo_caja_search"/>
+        <field name="context">{'search_default_filter_mes': 1}</field>
+    </record>
+
+    <!-- ==================== CUENTAS POR COBRAR (REPORTE) ==================== -->
+    <record id="view_reporte_cxc_tree" model="ir.ui.view">
+        <field name="name">ferreteria.reporte.cuentas.cobrar.tree</field>
+        <field name="model">ferreteria.reporte.cuentas.cobrar</field>
+        <field name="arch" type="xml">
+            <tree string="Resumen Cuentas por Cobrar"
+                  create="false" edit="false" delete="false"
+                  decoration-danger="dias_mora > 30"
+                  decoration-warning="dias_mora > 0 and dias_mora &lt;= 30">
+                <field name="partner_id"/>
+                <field name="cantidad_cuentas"/>
+                <field name="total_deuda" sum="Total Deuda"/>
+                <field name="total_pagado" sum="Total Pagado"/>
+                <field name="saldo_pendiente" sum="Saldo Total"/>
+                <field name="dias_mora" string="Mayor Mora (días)"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_reporte_cxc" model="ir.actions.act_window">
+        <field name="name">Resumen Cuentas por Cobrar</field>
+        <field name="res_model">ferreteria.reporte.cuentas.cobrar</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+</odoo>

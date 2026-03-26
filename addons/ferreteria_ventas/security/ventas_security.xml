@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Grupo: Vendedor Ferretería (hereda del grupo base de inventario) -->
+    <record id="group_vendedor_ferreteria" model="res.groups">
+        <field name="name">Vendedor Ferretería</field>
+        <field name="category_id" ref="ferreteria_inventario.module_category_ferreteria"/>
+        <field name="implied_ids" eval="[(4, ref('ferreteria_inventario.group_ferreteria_user'))]"/>
+    </record>
+
+    <!-- Grupo: Supervisor de Ventas -->
+    <record id="group_supervisor_ventas" model="res.groups">
+        <field name="name">Supervisor de Ventas</field>
+        <field name="category_id" ref="ferreteria_inventario.module_category_ferreteria"/>
+        <field name="implied_ids" eval="[(4, ref('group_vendedor_ferreteria'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- Regla: Vendedores solo ven sus propias órdenes -->
+    <record id="rule_sale_order_vendedor" model="ir.rule">
+        <field name="name">Ventas: Vendedor ve sus órdenes</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_vendedor_ferreteria'))]"/>
+    </record>
+
+    <!-- Regla: Supervisor ve todas las órdenes -->
+    <record id="rule_sale_order_supervisor" model="ir.rule">
+        <field name="name">Ventas: Supervisor ve todas las órdenes</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_supervisor_ventas'))]"/>
+    </record>
+
+    <!-- Regla: Descuento global solo supervisor puede poner > 10% -->
+    <!-- Nota: esto se maneja por lógica en el modelo, no por record rule -->
+
+</odoo>
