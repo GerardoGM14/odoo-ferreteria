@@ -17,6 +17,16 @@
         </field>
     </record>
 
+    <!-- Acción para ver productos de una categoría (desde stat button) -->
+    <!-- Debe declararse ANTES del form view que la referencia -->
+    <record id="action_ferreteria_productos_by_categoria" model="ir.actions.act_window">
+        <field name="name">Productos</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('ferreteria_categoria_id', '=', active_id)]</field>
+        <field name="context">{'default_es_ferreteria': True, 'default_ferreteria_categoria_id': active_id}</field>
+    </record>
+
     <!-- ==================== FORM VIEW ==================== -->
     <record id="view_ferreteria_categoria_form" model="ir.ui.view">
         <field name="name">ferreteria.categoria.form</field>
@@ -146,15 +156,6 @@
                 Las categorías te permiten organizar los productos de tu ferretería.
             </p>
         </field>
-    </record>
-
-    <!-- Acción para ver productos de una categoría (desde stat button) -->
-    <record id="action_ferreteria_productos_by_categoria" model="ir.actions.act_window">
-        <field name="name">Productos</field>
-        <field name="res_model">product.template</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[('ferreteria_categoria_id', '=', active_id)]</field>
-        <field name="context">{'default_es_ferreteria': True, 'default_ferreteria_categoria_id': active_id}</field>
     </record>
 
 </odoo>

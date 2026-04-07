@@ -58,7 +58,7 @@
     <menuitem id="menu_ferreteria_precios"
               name="Listas de Precios"
               parent="menu_ferreteria_config"
-              action="sale.product_pricelist_action2"
+              action="product.product_pricelist_action2"
               sequence="10"/>
 
 </odoo>
