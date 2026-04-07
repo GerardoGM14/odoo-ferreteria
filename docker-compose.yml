@@ -1,7 +1,7 @@
-version: '3.1'
 services:
   web:
-    image: odoo:17.0
+    build: .
+    image: odoo-ferreteria:17.0
     depends_on:
       - db
     ports:
