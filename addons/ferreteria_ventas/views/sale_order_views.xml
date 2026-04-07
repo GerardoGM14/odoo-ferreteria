@@ -33,12 +33,14 @@
                 <field name="ubicacion_producto" optional="show" string="Ubicación"/>
             </xpath>
 
-            <!-- Notas de venta -->
-            <xpath expr="//page[@name='note']" position="inside">
-                <group>
-                    <field name="ferreteria_notas"
-                           placeholder="Notas internas de la venta..."/>
-                </group>
+            <!-- Notas de venta: agregamos una pestaña propia al notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Notas Ferretería" name="ferreteria_notas_page">
+                    <group>
+                        <field name="ferreteria_notas"
+                               placeholder="Notas internas de la venta..."/>
+                    </group>
+                </page>
             </xpath>
 
         </field>

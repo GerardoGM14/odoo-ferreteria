@@ -11,8 +11,8 @@
         - Descuentos autorizados por grupo
         - Integración con inventario de ferretería
     """,
-    'author': 'Soporte',
-    'website': 'https://www.example.com',
+    'author': 'Trigra',
+    'website': 'https://trigra.com.pe',
     'category': 'Sales',
     'depends': [
         'ferreteria_inventario',
@@ -28,9 +28,9 @@
         # Vistas
         'views/res_partner_views.xml',
         'views/sale_order_views.xml',
-        'views/menu_views.xml',
-        # Wizards
+        # Wizards (deben cargarse antes que el menú que los referencia)
         'wizard/import_productos_wizard_views.xml',
+        'views/menu_views.xml',
     ],
     'external_dependencies': {
         'python': ['openpyxl'],
