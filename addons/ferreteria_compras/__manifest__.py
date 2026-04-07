@@ -11,8 +11,8 @@
         - Registro de proveedores por categoría de producto
         - Control de tiempos de entrega
     """,
-    'author': 'Soporte',
-    'website': 'https://www.example.com',
+    'author': 'Trigra',
+    'website': 'https://trigra.com.pe',
     'category': 'Purchase',
     'depends': [
         'ferreteria_inventario',
