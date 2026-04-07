@@ -10,8 +10,8 @@
         - Control de sesiones activas
         - Configuración simplificada de permisos
     """,
-    'author': 'Soporte',
-    'website': 'https://www.example.com',
+    'author': 'Trigra',
+    'website': 'https://trigra.com.pe',
     'category': 'Administration',
     'depends': [
         'ferreteria_inventario',

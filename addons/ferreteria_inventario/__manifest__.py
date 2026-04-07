@@ -11,8 +11,8 @@
         - 3 listas de precios (Mayorista, Normal, Menudeo)
         - Roles de seguridad (Vendedor / Administrador)
     """,
-    'author': 'Soporte',
-    'website': 'https://www.example.com',
+    'author': 'Trigra',
+    'website': 'https://trigra.com.pe',
     'category': 'Inventory',
     'depends': ['base', 'stock', 'product', 'sale_management'],
     'data': [

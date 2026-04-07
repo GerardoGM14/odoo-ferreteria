@@ -11,8 +11,8 @@
         - Reportes: ganancia diaria, flujo de caja, resumen financiero
         - Integración con ventas, compras y facturación
     """,
-    'author': 'Soporte',
-    'website': 'https://www.example.com',
+    'author': 'Trigra',
+    'website': 'https://trigra.com.pe',
     'category': 'Accounting',
     'depends': [
         'ferreteria_inventario',

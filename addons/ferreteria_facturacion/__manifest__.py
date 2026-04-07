@@ -15,8 +15,8 @@
         - Tipos de documento de identidad (RUC, DNI, CE, etc.)
         - IGV, ISC y otros tributos peruanos
     """,
-    'author': 'Soporte',
-    'website': 'https://www.example.com',
+    'author': 'Trigra',
+    'website': 'https://trigra.com.pe',
     'category': 'Accounting',
     'depends': [
         'ferreteria_inventario',
