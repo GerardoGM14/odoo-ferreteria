@@ -14,7 +14,7 @@
                             class="btn-danger"
                             invisible="state in ('pagada', 'cancelada')"
                             confirm="¿Cancelar esta cuenta por cobrar?"
-                            groups="group_admin_finanzas"/>
+                            groups="ferreteria_finanzas.group_admin_finanzas"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="pendiente,parcial,pagada"/>
                 </header>

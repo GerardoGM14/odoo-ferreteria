@@ -24,13 +24,13 @@
                             string="Arquear Caja"
                             class="btn-success"
                             invisible="state != 'cerrada'"
-                            groups="group_admin_finanzas"/>
+                            groups="ferreteria_finanzas.group_admin_finanzas"/>
                     <button name="action_reabrir_caja"
                             type="object"
                             string="Reabrir Caja"
                             class="btn-secondary"
                             invisible="state not in ('cerrada', 'arqueada')"
-                            groups="group_admin_finanzas"
+                            groups="ferreteria_finanzas.group_admin_finanzas"
                             confirm="¿Reabrir esta caja?"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="borrador,abierta,cerrada,arqueada"/>

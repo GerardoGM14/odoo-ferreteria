@@ -15,21 +15,21 @@
                         string="Generar Número"
                         class="btn-secondary"
                         invisible="sunat_estado != 'borrador' or move_type not in ('out_invoice', 'out_refund')"
-                        groups="group_facturador"/>
+                        groups="ferreteria_facturacion.group_facturador"/>
                 <button name="action_enviar_sunat"
                         type="object"
                         string="Enviar a SUNAT"
                         class="btn-primary"
                         icon="fa-paper-plane"
                         invisible="sunat_estado not in ('por_enviar', 'rechazado')"
-                        groups="group_facturador"/>
+                        groups="ferreteria_facturacion.group_facturador"/>
                 <button name="action_consultar_sunat"
                         type="object"
                         string="Consultar SUNAT"
                         class="btn-secondary"
                         icon="fa-search"
                         invisible="sunat_estado not in ('enviado', 'aceptado')"
-                        groups="group_facturador"/>
+                        groups="ferreteria_facturacion.group_facturador"/>
                 <button name="action_anular_sunat"
                         type="object"
                         string="Anular en SUNAT"
@@ -37,7 +37,7 @@
                         icon="fa-ban"
                         invisible="sunat_estado != 'aceptado'"
                         confirm="¿Está seguro de anular este comprobante en SUNAT?"
-                        groups="group_admin_facturacion"/>
+                        groups="ferreteria_facturacion.group_admin_facturacion"/>
             </xpath>
 
             <!-- Pestaña SUNAT -->
