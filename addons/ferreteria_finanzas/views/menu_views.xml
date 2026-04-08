@@ -38,7 +38,7 @@
               name="Reportes"
               parent="menu_ferreteria_finanzas"
               sequence="50"
-              groups="group_admin_finanzas"/>
+              groups="ferreteria_finanzas.group_admin_finanzas"/>
 
     <menuitem id="menu_reporte_ventas_diarias"
               name="Ventas Diarias"

@@ -38,7 +38,7 @@
                         string="Agregar Productos Bajo Stock"
                         class="btn-secondary"
                         invisible="state != 'draft'"
-                        groups="group_jefe_compras"/>
+                        groups="ferreteria_compras.group_jefe_compras"/>
             </xpath>
 
             <!-- Notas de compra -->
