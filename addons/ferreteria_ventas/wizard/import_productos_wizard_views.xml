@@ -47,6 +47,28 @@
                             type="object"
                             class="btn-primary"
                             invisible="state != 'draft'"/>
+                    <!-- Mantenimiento: solo manager, con confirmacion -->
+                    <button string="Archivar productos importados"
+                            name="action_archivar_productos"
+                            type="object"
+                            class="btn-warning"
+                            invisible="state != 'draft'"
+                            groups="ferreteria_inventario.group_ferreteria_manager"
+                            confirm="Esto archivara TODOS los productos de ferreteria que no tengan stock. Los productos quedaran ocultos pero podran restaurarse. Productos con stock > 0 seran omitidos por seguridad. ¿Continuar?"/>
+                    <button string="Restaurar archivados"
+                            name="action_restaurar_productos"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="state != 'draft'"
+                            groups="ferreteria_inventario.group_ferreteria_manager"
+                            confirm="Esto reactivara todos los productos de ferreteria archivados. ¿Continuar?"/>
+                    <button string="Borrar definitivamente"
+                            name="action_borrar_productos"
+                            type="object"
+                            class="btn-danger"
+                            invisible="state != 'draft'"
+                            groups="ferreteria_inventario.group_ferreteria_manager"
+                            confirm="¡PELIGRO! Esto intentara BORRAR definitivamente los productos de ferreteria sin stock. Los que tengan movimientos asociados se archivaran como fallback. Esta operacion NO se puede deshacer para los productos efectivamente borrados. ¿Estas absolutamente seguro?"/>
                     <button string="Cerrar"
                             class="btn-secondary"
                             special="cancel"/>

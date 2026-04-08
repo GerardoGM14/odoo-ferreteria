@@ -275,3 +275,139 @@ class ImportProductosWizard(models.TransientModel):
             'view_mode': 'form',
             'target': 'new',
         }
+
+    # ==================================================================
+    # MANTENIMIENTO: archivar / restaurar / borrar productos importados
+    # ==================================================================
+    # Estas operaciones SOLO afectan productos con es_ferreteria=True y
+    # SOLO excluyen aquellos con stock real (qty_available > 0) por
+    # seguridad. Restringidas al grupo manager desde la vista.
+
+    def _domain_productos_ferreteria_sin_stock(self, active):
+        """Productos de ferreteria, sin stock real, en estado activo dado."""
+        return [
+            ('es_ferreteria', '=', True),
+            ('active', '=', active),
+            ('qty_available', '<=', 0),
+        ]
+
+    def action_archivar_productos(self):
+        """Archiva (active=False) todos los productos de ferreteria sin stock."""
+        self.ensure_one()
+        Product = self.env['product.template']
+        productos = Product.search(
+            self._domain_productos_ferreteria_sin_stock(active=True)
+        )
+        con_stock = Product.search([
+            ('es_ferreteria', '=', True),
+            ('active', '=', True),
+            ('qty_available', '>', 0),
+        ])
+        total = len(productos)
+        productos.write({'active': False})
+
+        msg = [
+            'Archivado completado:',
+            f'  - Productos archivados: {total}',
+            f'  - Omitidos por tener stock > 0: {len(con_stock)}',
+            '',
+            'Los productos archivados pueden restaurarse con el boton',
+            '"Restaurar archivados".',
+        ]
+        self.write({'result_message': '\n'.join(msg), 'state': 'done'})
+        _logger.info(
+            'Archivado de productos ferreteria: %d archivados, %d omitidos por stock',
+            total, len(con_stock),
+        )
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': self._name,
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'new',
+        }
+
+    def action_restaurar_productos(self):
+        """Restaura (active=True) productos de ferreteria archivados."""
+        self.ensure_one()
+        Product = self.env['product.template'].with_context(active_test=False)
+        productos = Product.search([
+            ('es_ferreteria', '=', True),
+            ('active', '=', False),
+        ])
+        total = len(productos)
+        productos.write({'active': True})
+
+        msg = [
+            'Restauracion completada:',
+            f'  - Productos restaurados: {total}',
+        ]
+        self.write({'result_message': '\n'.join(msg), 'state': 'done'})
+        _logger.info('Restaurados %d productos ferreteria', total)
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': self._name,
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'new',
+        }
+
+    def action_borrar_productos(self):
+        """Borra definitivamente productos sin stock. Si fallan por
+        integridad referencial (movimientos, ventas, etc.), los archiva
+        como fallback para no dejarlos a medias."""
+        self.ensure_one()
+        Product = self.env['product.template'].with_context(active_test=False)
+        productos = Product.search(
+            self._domain_productos_ferreteria_sin_stock(active=True)
+        )
+        # Tambien intentamos borrar los archivados
+        archivados = Product.search([
+            ('es_ferreteria', '=', True),
+            ('active', '=', False),
+            ('qty_available', '<=', 0),
+        ])
+        candidatos = productos | archivados
+        con_stock = Product.search([
+            ('es_ferreteria', '=', True),
+            ('qty_available', '>', 0),
+        ])
+
+        borrados = 0
+        archivados_fallback = 0
+        # Intentamos borrar uno por uno, capturando errores de FK
+        for producto in candidatos:
+            try:
+                with self.env.cr.savepoint():
+                    producto.unlink()
+                    borrados += 1
+            except Exception as e:
+                # No se pudo borrar (movimientos, etc.) -> archivar
+                _logger.info(
+                    'No se pudo borrar producto %s (id=%d): %s. Archivando.',
+                    producto.default_code or producto.name, producto.id, e,
+                )
+                try:
+                    producto.write({'active': False})
+                    archivados_fallback += 1
+                except Exception:
+                    pass
+
+        msg = [
+            'Borrado definitivo completado:',
+            f'  - Productos borrados: {borrados}',
+            f'  - Archivados como fallback (tenian referencias): {archivados_fallback}',
+            f'  - Omitidos por tener stock > 0: {len(con_stock)}',
+        ]
+        self.write({'result_message': '\n'.join(msg), 'state': 'done'})
+        _logger.warning(
+            'Borrado definitivo: %d borrados, %d archivados fallback, %d omitidos por stock',
+            borrados, archivados_fallback, len(con_stock),
+        )
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': self._name,
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'new',
+        }
