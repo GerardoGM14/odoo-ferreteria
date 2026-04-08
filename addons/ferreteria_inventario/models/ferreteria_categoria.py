@@ -28,6 +28,18 @@ class FerreteriaCategoria(models.Model):
         string='Icono',
         help='Clase Font Awesome (ej: fa fa-wrench)',
     )
+    image_1920 = fields.Image(
+        string='Imagen',
+        max_width=1920,
+        max_height=1920,
+    )
+    image_128 = fields.Image(
+        string='Imagen (128)',
+        related='image_1920',
+        max_width=128,
+        max_height=128,
+        store=True,
+    )
     sequence = fields.Integer(default=10)
     product_count = fields.Integer(
         string='Nro. Productos',

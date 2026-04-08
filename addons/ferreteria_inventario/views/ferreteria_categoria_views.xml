@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
             <tree string="Categorías">
                 <field name="sequence" widget="handle"/>
+                <field name="image_128" widget="image" class="oe_avatar" options="{'size': [40, 40]}"/>
                 <field name="code"/>
                 <field name="name"/>
                 <field name="parent_id" optional="show"/>
@@ -46,6 +47,8 @@
                     <widget name="web_ribbon" title="Archivado"
                             bg_color="text-bg-danger"
                             invisible="active"/>
+                    <field name="image_1920" widget="image" class="oe_avatar"
+                           options="{'preview_image': 'image_128'}"/>
                     <div class="oe_title">
                         <h1>
                             <field name="name" placeholder="Nombre de la categoría..."/>
@@ -87,33 +90,33 @@
         <field name="name">ferreteria.categoria.kanban</field>
         <field name="model">ferreteria.categoria</field>
         <field name="arch" type="xml">
-            <kanban class="o_kanban_mobile">
+            <kanban>
                 <field name="name"/>
                 <field name="icon"/>
                 <field name="code"/>
                 <field name="product_count"/>
+                <field name="image_128"/>
                 <templates>
                     <t t-name="kanban-box">
-                        <div t-attf-class="oe_kanban_global_click">
-                            <div class="o_kanban_record_top mb-0">
-                                <div class="o_kanban_record_headleft">
-                                    <strong>
-                                        <i t-att-class="record.icon.raw_value or 'fa fa-th-large'"
-                                           style="margin-right: 8px;"/>
-                                        <field name="name"/>
-                                    </strong>
-                                </div>
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill">
+                            <div class="o_kanban_image_fill_left o_kanban_image_full"
+                                 t-attf-style="background-image: url(#{kanban_image('ferreteria.categoria', 'image_128', record.id.raw_value)});">
+                                <t t-if="!record.image_128.raw_value">
+                                    <i t-att-class="record.icon.raw_value or 'fa fa-th-large fa-3x'"
+                                       style="color: #999; display: block; text-align: center; padding-top: 35px;"/>
+                                </t>
                             </div>
-                            <div class="o_kanban_record_bottom">
-                                <div class="oe_kanban_bottom_left">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div class="o_kanban_tags_section">
                                     <span class="badge rounded-pill text-bg-primary">
                                         <field name="product_count"/> productos
                                     </span>
                                 </div>
-                                <div class="oe_kanban_bottom_right">
-                                    <span class="text-muted">
-                                        <field name="code"/>
-                                    </span>
+                                <div class="text-muted">
+                                    <field name="code"/>
                                 </div>
                             </div>
                         </div>
