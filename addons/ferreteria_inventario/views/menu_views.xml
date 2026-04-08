@@ -48,12 +48,34 @@
               action="action_stock_alert"
               sequence="40"/>
 
+    <!-- Stock actual: cantidades disponibles por producto/ubicación -->
+    <menuitem id="menu_ferreteria_stock_actual"
+              name="Stock Actual"
+              parent="menu_ferreteria_root"
+              action="stock.location_open_quants"
+              sequence="50"/>
+
+    <!-- Transferencias de stock (entradas, salidas, internas) -->
+    <menuitem id="menu_ferreteria_transferencias"
+              name="Transferencias"
+              parent="menu_ferreteria_root"
+              action="stock.action_picking_tree_all"
+              sequence="60"/>
+
+    <!-- Ajustes físicos de inventario (restringido al manager) -->
+    <menuitem id="menu_ferreteria_ajustes"
+              name="Ajustes de Inventario"
+              parent="menu_ferreteria_root"
+              action="stock.action_stock_inventory_adjustement_name"
+              sequence="70"
+              groups="ferreteria_inventario.group_ferreteria_manager"/>
+
     <!-- ==================== SUBMENÚ CONFIGURACIÓN ==================== -->
     <menuitem id="menu_ferreteria_config"
               name="Configuración"
               parent="menu_ferreteria_root"
               sequence="100"
-              groups="group_ferreteria_manager"/>
+              groups="ferreteria_inventario.group_ferreteria_manager"/>
 
     <menuitem id="menu_ferreteria_precios"
               name="Listas de Precios"
