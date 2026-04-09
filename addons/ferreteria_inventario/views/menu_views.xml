@@ -24,6 +24,13 @@
               sequence="10"/>
 
     <!-- ==================== MENÚ NIVEL 1 ==================== -->
+    <!-- Inicio: pantalla de bienvenida con dashboard y onboarding -->
+    <menuitem id="menu_ferreteria_inicio"
+              name="Inicio"
+              parent="menu_ferreteria_root"
+              action="action_ferreteria_bienvenida"
+              sequence="1"/>
+
     <menuitem id="menu_ferreteria_productos"
               name="Productos"
               parent="menu_ferreteria_root"
@@ -48,11 +55,14 @@
               action="action_stock_alert"
               sequence="40"/>
 
-    <!-- Stock actual: cantidades disponibles por producto/ubicación -->
+    <!-- Stock actual: cantidades disponibles por producto/ubicación.
+         Usamos dashboard_open_quants porque location_open_quants
+         tiene un domain con active_ids y falla cuando se invoca
+         como menu independiente sin seleccion previa de ubicacion. -->
     <menuitem id="menu_ferreteria_stock_actual"
               name="Stock Actual"
               parent="menu_ferreteria_root"
-              action="stock.location_open_quants"
+              action="stock.dashboard_open_quants"
               sequence="50"/>
 
     <!-- Transferencias de stock (entradas, salidas, internas) -->
@@ -62,13 +72,10 @@
               action="stock.action_picking_tree_all"
               sequence="60"/>
 
-    <!-- Ajustes físicos de inventario (restringido al manager) -->
-    <menuitem id="menu_ferreteria_ajustes"
-              name="Ajustes de Inventario"
-              parent="menu_ferreteria_root"
-              action="stock.action_stock_inventory_adjustement_name"
-              sequence="70"
-              groups="ferreteria_inventario.group_ferreteria_manager"/>
+    <!-- Nota: en Odoo 17 los ajustes fisicos se hacen desde la misma
+         vista "Stock Actual" (boton "Conteo fisico" en cada fila), no
+         hay una accion separada. Por eso no agregamos un menu "Ajustes",
+         para evitar el error de active_ids no definido. -->
 
     <!-- ==================== SUBMENÚ CONFIGURACIÓN ==================== -->
     <menuitem id="menu_ferreteria_config"

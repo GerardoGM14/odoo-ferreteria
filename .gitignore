@@ -43,3 +43,8 @@ filestore/
 .env
 *.pem
 *.key
+
+# Datos del cliente (se modifican al abrirse en Excel)
+historical/*.xlsx
+historical/*.xls
+historical/*.csv

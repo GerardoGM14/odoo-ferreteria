@@ -59,6 +59,25 @@ class ImportProductosWizard(models.TransientModel):
         except ValueError:
             return 0.0
 
+    def _parse_qty(self, value):
+        """Convierte una cantidad umbral del Excel a float.
+        A diferencia de _parse_price, aqui el valor NO trae prefijo de
+        moneda (son unidades, no soles). Formatos esperados:
+        3, 3.0, '3', '3,0', '-', '', None
+        Devuelve 0.0 si no es un numero valido.
+        """
+        if value is None:
+            return 0.0
+        text = str(value).strip()
+        if text in ('', '-', 'Cantidad'):
+            return 0.0
+        if ',' in text:
+            text = text.replace('.', '').replace(',', '.')
+        try:
+            return float(text)
+        except ValueError:
+            return 0.0
+
     def _get_departamento_categoria(self, departamento):
         """Mapea departamento del Excel a categoría de ferretería."""
         mapping = {
@@ -101,21 +120,23 @@ class ImportProductosWizard(models.TransientModel):
             raise UserError(_('El archivo Excel no tiene hojas.'))
 
         ProductTemplate = self.env['product.template']
-        Pricelist = self.env['product.pricelist']
         PricelistItem = self.env['product.pricelist.item']
 
-        # Obtener las 4 listas de precios
-        pricelist_refs = [
-            'ferreteria_inventario.pricelist_mayoreo1',
-            'ferreteria_inventario.pricelist_mayoreo2',
-            'ferreteria_inventario.pricelist_mayoreo3',
-            'ferreteria_inventario.pricelist_mayoreo4',
-        ]
-        pricelists = []
-        for ref in pricelist_refs:
-            pl = self.env.ref(ref, raise_if_not_found=False)
-            if pl:
-                pricelists.append(pl)
+        # Obtener la unica pricelist de ferreteria. Dentro de esta
+        # pricelist, cada producto tendra hasta 4 reglas con distinto
+        # min_quantity (0, 3, 6, 12 o lo que diga el Excel), y Odoo
+        # aplicara automaticamente la regla correcta segun la cantidad
+        # que el vendedor este facturando.
+        pricelist = self.env.ref(
+            'ferreteria_inventario.pricelist_ferreteria',
+            raise_if_not_found=False,
+        )
+        if not pricelist:
+            raise UserError(_(
+                'No se encontro la lista de precios "Lista de Precios '
+                'Ferreteria". Verifica que el modulo ferreteria_inventario '
+                'este instalado y actualizado.'
+            ))
 
         created = 0
         updated = 0
@@ -123,6 +144,11 @@ class ImportProductosWizard(models.TransientModel):
         errors = []
         current_departamento = 'SIN DEFINIR'
         current_proveedor = 'SIN DEFINIR'
+        # Cantidades umbral para reglas de volumen.
+        # Se leen de la fila "cabecera" (la que tiene 'Cantidad' en col F)
+        # y se aplican al siguiente producto (fila de datos). El umbral
+        # de Mayoreo 1 siempre es 0 porque es el precio base.
+        current_min_qty = [0.0, 0.0, 0.0, 0.0]
 
         # Recorrer filas (empezar desde fila 6 que es donde comienzan datos)
         for row_idx in range(6, ws.max_row + 1):
@@ -135,12 +161,21 @@ class ImportProductosWizard(models.TransientModel):
                 m_val = ws.cell(row=row_idx, column=13).value
                 p_val = ws.cell(row=row_idx, column=16).value
 
-                # Fila de metadatos (departamento/proveedor)
+                # Fila de metadatos (departamento/proveedor + cantidades umbral)
                 if f_val == 'Cantidad':
                     if a_val:
                         current_departamento = str(a_val).strip()
                     if d_val:
                         current_proveedor = str(d_val).strip()
+                    # Las cantidades umbral estan en las mismas columnas
+                    # que los precios (I, L, M, P). Mayoreo 1 siempre es 0
+                    # porque es el precio base (de 0 unidades en adelante).
+                    current_min_qty = [
+                        0.0,
+                        self._parse_qty(l_val),
+                        self._parse_qty(m_val),
+                        self._parse_qty(p_val),
+                    ]
                     continue
 
                 # Fila sin código = saltar
@@ -210,28 +245,43 @@ class ImportProductosWizard(models.TransientModel):
                     product = ProductTemplate.create(vals)
                     created += 1
 
-                # Configurar precios en las listas
-                for idx, pricelist in enumerate(pricelists):
-                    price = prices[idx] if idx < len(prices) else 0.0
-                    if price > 0:
-                        # Buscar item existente
-                        existing_item = PricelistItem.search([
-                            ('pricelist_id', '=', pricelist.id),
-                            ('product_tmpl_id', '=', product.id),
-                        ], limit=1)
+                # Reglas de volumen dentro de la unica pricelist.
+                #
+                # Cada producto tiene hasta 4 reglas (Mayoreo 1/2/3/4),
+                # todas en la MISMA pricelist, diferenciadas por el campo
+                # min_quantity. Odoo selecciona automaticamente la regla
+                # cuyo min_quantity sea el mayor que todavia sea <= la
+                # cantidad vendida:
+                #
+                #   Mayoreo 1: min_qty=0   -> precio base (siempre aplica)
+                #   Mayoreo 2: min_qty=3   -> aplica si cantidad >= 3
+                #   Mayoreo 3: min_qty=6   -> aplica si cantidad >= 6
+                #   Mayoreo 4: min_qty=12  -> aplica si cantidad >= 12
+                #
+                # Primero borramos las reglas antiguas de este producto
+                # en esta pricelist (para evitar acumular reglas viejas
+                # cuando se re-importa con distintas cantidades umbral).
+                PricelistItem.search([
+                    ('pricelist_id', '=', pricelist.id),
+                    ('product_tmpl_id', '=', product.id),
+                ]).unlink()
 
-                        item_vals = {
+                for idx in range(4):
+                    price = prices[idx] if idx < len(prices) else 0.0
+                    min_qty = current_min_qty[idx] if idx < len(current_min_qty) else 0.0
+                    # Solo crear la regla si hay precio definido.
+                    # Mayoreo 1 (idx=0) tambien necesita precio > 0;
+                    # si no hay precio base, el producto no tendra ninguna
+                    # regla y usara su list_price estandar.
+                    if price > 0:
+                        PricelistItem.create({
                             'pricelist_id': pricelist.id,
                             'product_tmpl_id': product.id,
                             'applied_on': '1_product',
                             'compute_price': 'fixed',
                             'fixed_price': price,
-                        }
-
-                        if existing_item:
-                            existing_item.write(item_vals)
-                        else:
-                            PricelistItem.create(item_vals)
+                            'min_quantity': min_qty,
+                        })
 
                 # Commit cada 100 productos para no perder progreso
                 if (created + updated) % 100 == 0:

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== FORM VIEW (dashboard) ==================== -->
+    <!-- La form view debe declararse ANTES que la action que la referencia -->
+
+    <record id="view_ferreteria_bienvenida_form" model="ir.ui.view">
+        <field name="name">ferreteria.bienvenida.form</field>
+        <field name="model">ferreteria.bienvenida</field>
+        <field name="arch" type="xml">
+            <form string="Bienvenido a Ferretería" create="false" edit="false" delete="false">
+                <sheet>
+                    <!-- Encabezado de bienvenida -->
+                    <div class="oe_title" style="width: 100%;">
+                        <h1 style="color: #714B67;">
+                            <i class="fa fa-wrench" style="margin-right: 10px;"/>
+                            ¡Bienvenido a tu ERP de Ferretería!
+                        </h1>
+                        <p class="text-muted" style="font-size: 16px;">
+                            Aquí tienes un resumen de tu tienda y los pasos
+                            sugeridos para sacarle el máximo provecho al sistema.
+                        </p>
+                    </div>
+
+                    <!-- Estadísticas vivas -->
+                    <h2 style="margin-top: 25px;">Estado actual</h2>
+                    <group>
+                        <group>
+                            <field name="categorias_count" readonly="1"/>
+                            <field name="productos_count" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="productos_bajo_stock" readonly="1"/>
+                            <field name="cajas_abiertas" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Pasos de onboarding (Opción A) -->
+                    <h2 style="margin-top: 25px;">Pasos sugeridos para empezar</h2>
+
+                    <div class="alert alert-info" role="alert" style="margin-top: 15px;">
+                        <h4>
+                            <i class="fa fa-tags" style="margin-right: 8px;"/>
+                            <b>Paso 1: Crea tus categorías</b>
+                        </h4>
+                        <p>
+                            Empieza con 5-10 categorías grandes (Herramientas,
+                            Plomería, Eléctrico, Pinturas, Tornillería...).
+                            Súbeles una imagen para que tu vendedor las
+                            identifique de un vistazo.
+                        </p>
+                        <button name="action_ir_categorias" type="object"
+                                string="Ir a Categorías"
+                                class="btn btn-primary"/>
+                    </div>
+
+                    <div class="alert alert-info" role="alert" style="margin-top: 15px;">
+                        <h4>
+                            <i class="fa fa-cubes" style="margin-right: 8px;"/>
+                            <b>Paso 2: Importa o crea tus productos</b>
+                        </h4>
+                        <p>
+                            Si tienes una lista de precios en Excel, ve a
+                            <b>Ferretería → Herramientas → Importar Productos
+                            (Excel)</b> y súbela. Si prefieres crearlos uno
+                            a uno, también puedes hacerlo desde Productos.
+                        </p>
+                        <button name="action_ir_productos" type="object"
+                                string="Ir a Productos"
+                                class="btn btn-primary"/>
+                    </div>
+
+                    <div class="alert alert-warning" role="alert" style="margin-top: 15px;">
+                        <h4>
+                            <i class="fa fa-balance-scale" style="margin-right: 8px;"/>
+                            <b>Paso 3: Registra tu inventario inicial</b>
+                        </h4>
+                        <p>
+                            Una vez creados los productos, ve a
+                            <b>Stock Actual</b> y registra cuántas unidades
+                            tienes hoy de cada uno (botón "Actualizar
+                            cantidad" en cada fila). Esto solo se hace una
+                            vez. A partir de ahí, las compras y ventas
+                            actualizarán el stock automáticamente.
+                        </p>
+                        <button name="action_ir_stock" type="object"
+                                string="Ver Stock Actual"
+                                class="btn btn-warning"/>
+                    </div>
+
+                    <div class="alert alert-success" role="alert" style="margin-top: 15px;">
+                        <h4>
+                            <i class="fa fa-bell" style="margin-right: 8px;"/>
+                            <b>Paso 4: Configura tus stocks mínimos</b>
+                        </h4>
+                        <p>
+                            En cada producto, define el campo
+                            <b>"Stock Mínimo"</b>. Cuando un producto baje
+                            de ese nivel, el sistema te avisará automáticamente
+                            en la sección de alertas.
+                        </p>
+                        <button name="action_ir_alertas" type="object"
+                                string="Ver Alertas de Stock"
+                                class="btn btn-success"/>
+                    </div>
+
+                    <!-- Tip final -->
+                    <div style="margin-top: 25px; padding: 15px; background: #f8f9fa; border-left: 4px solid #714B67;">
+                        <p style="margin: 0;">
+                            <i class="fa fa-lightbulb-o" style="margin-right: 8px; color: #714B67;"/>
+                            <b>Tip:</b> puedes volver a esta pantalla en
+                            cualquier momento desde el menú
+                            <b>Ferretería → Inicio</b>.
+                        </p>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_ferreteria_bienvenida" model="ir.actions.act_window">
+        <field name="name">Bienvenido a Ferretería</field>
+        <field name="res_model">ferreteria.bienvenida</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_ferreteria_bienvenida_form"/>
+        <field name="target">inline</field>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>
