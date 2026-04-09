@@ -1,24 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
 
-    <record id="pricelist_mayoreo1" model="product.pricelist">
-        <field name="name">Mayoreo 1 - Precio Base</field>
+    <!--
+        Lista de precios unica de la ferreteria.
+
+        Disena para que una sola pricelist aplique automaticamente el
+        precio correcto segun la cantidad facturada. Cada producto tiene
+        hasta 4 reglas dentro de esta lista (Mayoreo 1 / 2 / 3 / 4) con
+        distintos min_quantity. Cuando el vendedor emite una factura,
+        Odoo selecciona automaticamente la regla cuyo min_quantity sea
+        el mayor que todavia sea <= cantidad vendida.
+
+        Las 4 pricelists historicas (Mayoreo 1 a 4) se archivan para
+        preservar integridad referencial si ya existieran items con
+        ellas, pero dejan de usarse en el flujo normal.
+    -->
+    <record id="pricelist_ferreteria" model="product.pricelist">
+        <field name="name">Lista de Precios Ferretería</field>
         <field name="sequence">1</field>
+        <field name="active" eval="True"/>
+    </record>
+
+    <!-- Pricelists legacy: se archivan para no confundir al usuario
+         pero no se borran porque pueden tener referencias historicas. -->
+    <record id="pricelist_mayoreo1" model="product.pricelist">
+        <field name="name">Mayoreo 1 - Precio Base (legacy)</field>
+        <field name="sequence">90</field>
+        <field name="active" eval="False"/>
     </record>
 
     <record id="pricelist_mayoreo2" model="product.pricelist">
-        <field name="name">Mayoreo 2</field>
-        <field name="sequence">2</field>
+        <field name="name">Mayoreo 2 (legacy)</field>
+        <field name="sequence">91</field>
+        <field name="active" eval="False"/>
     </record>
 
     <record id="pricelist_mayoreo3" model="product.pricelist">
-        <field name="name">Mayoreo 3</field>
-        <field name="sequence">3</field>
+        <field name="name">Mayoreo 3 (legacy)</field>
+        <field name="sequence">92</field>
+        <field name="active" eval="False"/>
     </record>
 
     <record id="pricelist_mayoreo4" model="product.pricelist">
-        <field name="name">Mayoreo 4</field>
-        <field name="sequence">4</field>
+        <field name="name">Mayoreo 4 (legacy)</field>
+        <field name="sequence">93</field>
+        <field name="active" eval="False"/>
     </record>
 
 </odoo>

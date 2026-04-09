@@ -153,10 +153,30 @@
         <field name="search_view_id" ref="view_ferreteria_categoria_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Crear una nueva categoría
+                ¡Crea tu primera categoría!
             </p>
             <p>
-                Las categorías te permiten organizar los productos de tu ferretería.
+                Las categorías son la columna vertebral de tu inventario.
+                Agrupan productos parecidos para que tu vendedor los encuentre
+                rápido y para que puedas ver reportes por sección de la tienda.
+            </p>
+            <h4 style="margin-top: 20px;">¿Por qué empezar por aquí?</h4>
+            <ul>
+                <li><b>Organización visual:</b> al subirles una imagen, tu
+                    vendedor identifica la sección de un vistazo</li>
+                <li><b>Reportes claros:</b> "¿cuánto vendí en Plomería este mes?"
+                    se responde en un clic</li>
+                <li><b>Importación más limpia:</b> cuando importes el Excel de
+                    productos, cada uno caerá en su categoría correcta</li>
+            </ul>
+            <h4 style="margin-top: 20px;">Tip:</h4>
+            <p>
+                Empieza con <b>5 a 10 categorías grandes</b> (Herramientas,
+                Plomería, Eléctrico, Pinturas, Tornillería, etc.). Más adelante
+                puedes crear subcategorías si las necesitas.
+            </p>
+            <p>
+                Pulsa <b>"Nuevo"</b> arriba para crear la primera.
             </p>
         </field>
     </record>

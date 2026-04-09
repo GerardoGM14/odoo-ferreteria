@@ -28,6 +28,7 @@
         'views/product_template_views.xml',
         'views/ferreteria_kardex_views.xml',
         'views/stock_alert_views.xml',
+        'views/ferreteria_bienvenida_views.xml',
         'views/menu_views.xml',
     ],
     'installable': True,
