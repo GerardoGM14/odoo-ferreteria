@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Extiende el form view de ferreteria.categoria para mostrar al
+        usuario que la categoria esta sincronizada con el POS.
+        El campo pos_category_id es readonly y solo informativo.
+    -->
+    <record id="view_ferreteria_categoria_form_pos" model="ir.ui.view">
+        <field name="name">ferreteria.categoria.form.pos</field>
+        <field name="model">ferreteria.categoria</field>
+        <field name="inherit_id"
+               ref="ferreteria_inventario.view_ferreteria_categoria_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='active']" position="after">
+                <field name="pos_category_id"
+                       readonly="1"
+                       help="Categoría espejo en el POS, sincronizada
+                             automáticamente."/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

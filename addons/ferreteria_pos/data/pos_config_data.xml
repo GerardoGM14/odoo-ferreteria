@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!--
+        Configuracion por defecto del POS para Solucenter:
+
+        - Renombramos el POS "Shop" generado por defecto a algo mas
+          descriptivo.
+        - Activamos el uso de listas de precios (use_pricelist=True)
+          para que las reglas de volumen de la "Lista de Precios
+          Ferreteria" apliquen automaticamente al facturar.
+        - Asignamos como pricelist principal y unica disponible la
+          que ya tenemos en ferreteria_inventario.
+        - Permitimos manejar clientes (necesario para emitir boletas
+          con DNI o facturas con RUC).
+
+        Nota: usamos noupdate="1" para que el usuario pueda editar
+        estas configuraciones manualmente despues sin que un upgrade
+        del modulo se las sobreescriba.
+    -->
+    <record id="point_of_sale.pos_config_main" model="pos.config">
+        <field name="name">Mostrador Solucenter</field>
+        <field name="use_pricelist" eval="True"/>
+        <field name="pricelist_id" ref="ferreteria_inventario.pricelist_ferreteria"/>
+        <field name="available_pricelist_ids"
+               eval="[(6, 0, [ref('ferreteria_inventario.pricelist_ferreteria')])]"/>
+    </record>
+
+</odoo>

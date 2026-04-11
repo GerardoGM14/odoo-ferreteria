@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Ocultamos los menus de caja diaria y movimientos de caja del
+        modulo ferreteria_finanzas porque ahora la gestion de caja la
+        hace el POS via pos.session (apertura, movimientos, cierre y
+        arqueo).
+
+        El reporte de flujo de caja sigue visible porque es solo de
+        consulta y no implica abrir/cerrar cajas paralelas.
+
+        El codigo del modelo ferreteria.caja.diaria queda intacto: si
+        en el futuro Solucenter quiere reactivar este sistema (por
+        ejemplo para una caja administrativa separada del mostrador),
+        basta con desinstalar ferreteria_pos.
+    -->
+    <record id="ferreteria_finanzas.menu_caja_diaria" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="ferreteria_finanzas.menu_movimientos_caja" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+</odoo>
