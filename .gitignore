@@ -48,3 +48,6 @@ filestore/
 historical/*.xlsx
 historical/*.xls
 historical/*.csv
+
+# Backups generados por scripts/backup.ps1
+backups/
