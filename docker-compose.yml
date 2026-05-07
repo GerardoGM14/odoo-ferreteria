@@ -2,6 +2,7 @@ services:
   web:
     build: .
     image: odoo-ferreteria:17.0
+    restart: unless-stopped
     depends_on:
       - db
     ports:
@@ -19,6 +20,7 @@ services:
 
   db:
     image: postgres:15
+    restart: unless-stopped
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_PASSWORD=odoo
